@@ -1,0 +1,75 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block extra_css %}
+<style>
+       footer{
+        display: none;
+    }
+    .table-responsive {
+        max-height: 600px;
+        overflow-y: auto;
+    }
+    .table th {
+        position: sticky;
+        top: 0;
+        background-color: #f8f9fa;
+        z-index: 1;
+    }
+    body{
+        color: #f8f9fa;
+    }
+    .btn-reservation {
+        width: 100%;
+    }
+    .btn-reservation{
+        background-color: #FF9F29;
+    }
+    .btn-reservation:hover{
+        background-color: #1A4D2E;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container mt-4 bootstrap-scope">
+    <h1 class="mb-4 text-center">Disponibilités de {{ coach.username }}</h1>
+    
+    <div class="table-responsive">
+        <table class="table table-bordered table-hover">
+            <thead class="thead-light">
+                <tr>
+                    <th>Heure</th>
+                    {% for jour, _ in disponibilites.items %}
+                        <th>{{ jour|date:"D d/m" }}</th>
+                    {% endfor %}
+                </tr>
+            </thead>
+            <tbody>
+                {% for heure in heures %}
+                    <tr>
+                        <td class="font-weight-bold">{{ heure }}:00</td>
+                        {% for jour, heures_dispo in disponibilites.items %}
+                            <td>
+                                {% if heure in heures_dispo %}
+                                <form method="POST" action="{% url 'dispo_coach' coach.id %}">
+                                    {% csrf_token %}
+                                    <!-- <input type="text" name="coachid" value="{{ coach.id }}"> -->
+                                    <input type="hidden" name="date" value="{{ jour|date:'Y-m-d' }}">
+                                    <input type="hidden" name="heure" value="{{ heure }}:00">
+                                    <button type="submit" class="btn btn-reservation">
+                                        Réserver
+                                    </button>
+                                </form>
+                            {% else %}
+                                <span class="text-muted">Réservé</span>
+                            {% endif %}
+                            </td>
+                        {% endfor %}
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock content %}

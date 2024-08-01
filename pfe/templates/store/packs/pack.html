@@ -1,0 +1,97 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/store/pack.css' %}">
+<style>
+    /* Ajoutez ces nouvelles règles à la fin */
+    *:focus {
+        outline: none !important;
+        box-shadow: none !important;
+    }
+
+    .btn:focus, .form-control:focus {
+        border: 2px solid #1A4D2E!important;
+        box-shadow: none!important;
+        transition: 1s;
+    }
+</style>
+{% endblock extra_css %}
+
+{% block content %}
+<section class="bootstrap-scope">
+    <div class="container mt-5">
+        <div class="row justify-content-center">
+            <div class="col-md-8">
+                <div class="card text-white">
+                    <div class="card-header text-center">
+                        <h2 class="mb-0">Pack {{ sub.get_type_display }}</h2>
+                    </div>
+                    <div class="card-body">
+                        <div class="text-center mb-4">
+                            <span class="display-4 font-weight-bold">{{ sub.price }}€</span>
+                            <span class="text-muted">/ {{ sub.duration }}</span>
+                        </div>
+                        <ul class="list-group list-group-flush">
+                            <li class="list-group-item text-white">
+                                <i class="fas fa-clock mr-2"></i>Accès: {{ sub.get_access_hours_display }}
+                            </li>
+                            <li class="list-group-item text-white">
+                                <i class="fas fa-dumbbell mr-2"></i>Séances coach: {{ sub.coach_sessions }}
+                            </li>
+                            <li class="list-group-item text-white">
+                                <i class="fas fa-users mr-2"></i>Accès aux cours collectifs: {% if sub.class_access %}Oui{% else %}Non{% endif %}
+                            </li>
+                            <li class="list-group-item text-white">
+                                <i class="fas fa-user-friends mr-2"></i>Invitations amis: {{ sub.friend_invites }}
+                            </li>
+                            {% if sub.shop_discount > 0 %}
+                            <li class="list-group-item text-white">
+                                <i class="fas fa-tag mr-2"></i>Réduction boutique: {{ sub.shop_discount }}%
+                            </li>
+                            {% endif %}
+                        </ul>
+                    </div>
+                    <div class="card-footer text-center divcardbtn">
+                        <a href="#subscription-form" class="">Souscrire maintenant</a>
+                    </div>
+                </div>
+
+                <div id="subscription-form" class="subscription-form">
+                    <h3 class="text-center">Formulaire de souscription</h3>
+                    <form action="{% url 'form_pack_validate' %}" method="POST">
+                        {% csrf_token %}
+
+                        <div class="form-group">
+                            <input type="hidden" class="form-control" id="sub" value="{{sub.id}}" name="subtype" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="email">Current Mail</label>
+                            <input type="email" class="form-control" id="email" value="{{user.email}}" name="email" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="start_date">Start Date</label>
+                            <!-- <input type="date" class="form-control" value="{{now}}" id="start_date" name="start_date" required> -->
+                            <input type="date" class="form-control date-input" id="start_date" name="start_date" required>
+                            
+                        </div>
+                       
+                        <div class="form-group">
+                            <label for="phone">Phone</label>
+                            <input type="tel" class="form-control" id="phone" name="phone" value="{{user.phone_user}}" required>
+                        </div>
+                        <div class="text-center divcardbtn">
+                            <br> <br>
+                            <br> 
+                            <button type="submit" class="">Reserver la souscription</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+
+{% endblock %}

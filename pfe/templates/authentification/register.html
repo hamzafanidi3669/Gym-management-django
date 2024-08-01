@@ -1,0 +1,162 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/authentification/register.css' %}">
+{% endblock extra_css %}
+
+{% block content %}
+
+<div class="containerr">
+    <form action="" method="post" class="login-box">
+        {% csrf_token %}
+        
+        <div class="login-header">
+            <header>Register</header>
+        </div>
+        
+        <!-- Champ Nom de famille -->
+        <div class="input-row">
+            <div class="input-box">
+                <input type="text" id="last_name" name="last_name" class="input-field" placeholder="Nom de famille" required>
+                {% if form.last_name.errors %}
+                    <div class="error-messages">
+                        {% for error in form.last_name.errors %}
+                            <p>{{ error }}</p>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+            </div>
+            
+            <!-- Champ Prénom -->
+            <div class="input-box">
+                <input type="text" id="first_name" name="first_name" class="input-field" placeholder="Prénom" required>
+                {% if form.first_name.errors %}
+                    <div class="error-messages">
+                        {% for error in form.first_name.errors %}
+                            <p>{{ error }}</p>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+        
+        <!-- Champ Numéro de téléphone -->
+        <div class="input-row">
+            <div class="input-box">
+                <input type="text" id="phone_number" name="phone_user" class="input-field" placeholder="Numéro de téléphone" required>
+                {% if form.phone_user.errors %}
+                    <div class="error-messages">
+                        {% for error in form.phone_user.errors %}
+                            <p>{{ error }}</p>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+            </div>
+
+            <!-- Champ Adresse -->
+            <div class="input-box">
+                <input type="text" id="address" name="adress_user" class="input-field" placeholder="Adresse" required>
+                {% if form.adress_user.errors %}
+                    <div class="error-messages">
+                        {% for error in form.adress_user.errors %}
+                            <p>{{ error }}</p>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+
+<!-- pays wcity -->
+        <div class="input-row">
+            <div class="input-box">
+                <input type="text" id="country_user" name="country_user" class="input-field" placeholder="Country">
+                {% if form.country_user.errors %}
+                    <div class="error-messages">
+                        {% for error in form.country_user.errors %}
+                            <p>{{ error }}</p>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+            </div>
+
+            <!-- city -->
+            <div class="input-box">
+                <input type="text" id="ville_user" name="ville_user" class="input-field" placeholder="City" required>
+                {% if form.city_user.errors %}
+                    <div class="error-messages">
+                        {% for error in form.ville_user.errors %}
+                            <p>{{ error }}</p>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+        
+        <!-- Champ Nom d'utilisateur -->
+        <div class="input-row">
+            <div class="input-box">
+                <input type="text" id="username" name="username" class="input-field" placeholder="Nom d'utilisateur" required>
+                {% if form.username.errors %}
+                    <div class="error-messages">
+                        {% for error in form.username.errors %}
+                            <p>{{ error }}</p>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+            </div>
+            
+            <!-- Champ Email -->
+            <div class="input-box">
+                <input type="email" id="email" name="email" class="input-field" placeholder="Adresse e-mail" required>
+                {% if form.email.errors %}
+                    <div class="error-messages">
+                        {% for error in form.email.errors %}
+                            <p>{{ error }}</p>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+        
+        <!-- Champ Mot de passe -->
+        <div class="input-row">
+            <div class="input-box">
+                <input type="password" id="password1" name="password1" class="input-field" placeholder="Mot de passe" required>
+                {% if form.password1.errors %}
+                    <div class="error-messages">
+                        {% for error in form.password1.errors %}
+                            <p>{{ error }}</p>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+            </div>
+            
+            <!-- Champ Confirmation de mot de passe -->
+            <div class="input-box">
+                <input type="password" id="password2" name="password2" class="input-field" placeholder="Confirmer le mot de passe" required>
+                {% if form.password2.errors %}
+                    <div class="error-messages">
+                        {% for error in form.password2.errors %}
+                            <p>{{ error }}</p>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+            </div>
+
+
+            
+        </div>
+
+        <div class="input-submit">
+            <button type="submit" class="submit-btn" id="submit">Soumettre</button>
+        </div>
+        
+        <div class="sign-up-link">
+            <p>Vous avez déjà un compte? <a href="{% url 'login' %}">Connexion</a></p>
+        </div>
+    </form>
+</div>
+
+{% endblock content %}

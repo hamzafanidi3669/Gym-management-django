@@ -1,0 +1,163 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/mininav.css' %}">
+<link rel="stylesheet" href="{% static 'css/store/store.css' %}">
+<link rel="stylesheet" href="{% static 'css/store/product.css' %}">
+<style>
+    .btn_delete_product{
+        background-color: #ff0000;
+        width: 50%;
+    }
+    .deleteproduct_div{
+        margin-top: 10px;
+    }
+    .btn_produit_form{
+        text-decoration: none!important;
+        display: flex;
+        justify-content: center;
+    }
+    .imgproduct {
+        position: relative;
+    }
+
+    .sold-out-overlay {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        max-width: 80%;
+        max-height: 80%;
+        z-index: 2;
+    }
+
+    .gray-background {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        /* background-color: rgba(46, 46, 46, 0.7); */
+        border: rgb(28, 28, 28) 1px solid;
+        z-index: 1;
+    }
+
+
+   
+</style>
+{% endblock extra_css %}
+
+{% block content %}
+{% include 'partials/mininav.html' %}
+<br>
+
+
+<div class="container_product bootstrap-scope">
+    <div class="partieimg_product">
+        <div class="imgproduct">
+            <img src="{{ product.image.url }}" alt="image produit">
+            {% if product.quantity_stock < 1 %}
+                <div class="gray-background"></div>
+                <img src="{% static 'image/sold_out-removebg-preview.png' %}" alt="Sold Out" class="sold-out-overlay">
+            {% endif %}
+        </div>
+    </div>
+    <div class="partietxt_product">
+        <div class="partietxt_titre">
+            <h1>{{ product.name }}</h2>
+        </div>
+        <div class="partietxt_price">
+            <h2>{{ product.sale_price }} MAD</h2>
+        </div>
+        <div class="partietxt_desc">
+            <p>{{ product.description }}</p>
+        </div>
+        <div class="partietxt_brand">
+            <span class="marque_partietxt">Marque :</span>
+            <span class="brand_partietxt">{{ product.brand }}</span>
+        </div>
+        <div class="partietxt_flavor">
+            <span class="flavor_partietxt">Flavor :</span>
+            <span class="flavorname_partietxt">{{ product.flavor }}</span>
+        </div>
+     
+        {% if user.is_superuser %}
+
+            <a href="{% url 'modify_product' product.id %}" type="submit" class="btn_produit_form">MODIFY PRODUCT</a>
+        <form method="post" action="{% url 'delete_product' %}" class="deleteproduct_div delete-product-form">
+            {% csrf_token %}
+            <input type="hidden" name="productid" value="{{product.id}}">
+            <button type="submit" class="btn btn-danger btn_delete_product" id="delete-product-{{ product.id }}">DELETE PRODUCT</button>
+        </form>
+
+
+
+
+        {% else %}
+        <form action="{% url 'add_to_cart' product.id %}" class="form_produit" method="post">
+            {% csrf_token %}
+            <input type="number" class="produit_quantite_input" name="quantity" placeholder="QUANTIY" min="1" max="5" required> <br>
+            <button type="submit" class="btn_produit_form">ADD TO CART</button>
+        </form>
+        {% endif %}
+
+
+    </div>
+</div>
+
+
+<!-- products -->
+<div class="container_product_bas">
+    <div class="products">
+        <div class="products-grid" id="product-grid">
+            {% for produit in produits %}
+            <div class="product-item">
+                <a href="" class="product-link">
+                    <div class="product-img">
+                        <img src="{{ produit.image.url }}" alt="{{ produit.name }}">
+                    </div>
+                    <div class="product-info">
+                        <h3 class="product-name">{{ produit.name }}</h3>
+                        <p class="product-desc">{{ produit.description }}</p>
+                    </div>
+                </a>
+                <div class="product-price-btn">
+                    <p class="product-price">{{ produit.price }} DHS</p>
+                    <form method="post" action="{% url 'add_to_cart' produit.id %}">
+                        {% csrf_token %}
+                        <button type="submit" class="product-add-btn">Add</button>
+                    </form>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+    
+</div>
+
+
+{% endblock content %}
+
+
+
+{% block js %}
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    var deleteForms = document.querySelectorAll('.delete-product-form');
+    
+    deleteForms.forEach(function(form) {
+        form.addEventListener('submit', function(event) {
+            event.preventDefault();
+            
+            var confirmDelete = confirm("Are you sure you want to delete this product?");
+            
+            if (confirmDelete) {
+                this.submit();
+            }
+        });
+    });
+});
+</script>
+{% endblock js %}

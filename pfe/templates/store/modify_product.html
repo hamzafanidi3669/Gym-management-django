@@ -1,0 +1,159 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/store/add.css' %}">
+<style>
+  
+    .input-box input[type="text"],
+    .input-box input[type="file"],
+    .input-box select {
+        width: 100%;
+        padding: 10px;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        font-size: 16px;
+        transition: border-color 0.3s ease;
+    }
+
+    .input-box input[type="text"]:focus,
+    .input-box input[type="file"]:focus,
+    .input-box select:focus {
+        outline: none;
+        box-shadow: 0 0 0 2px rgba(0,123,255,0.25);
+    }
+
+    .input-box select {
+        appearance: none;
+        -webkit-appearance: none;
+        -moz-appearance: none;
+        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' fill='%23333' viewBox='0 0 16 16'%3E%3Cpath d='M7.247 11.14 2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z'/%3E%3C/svg%3E");
+        background-repeat: no-repeat;
+        background-position: right 10px center;
+        padding-right: 30px;
+    }
+
+    .input-box input[type="checkbox"] {
+        margin-right: 5px;
+    }
+
+    .input-box input[type="file"] {
+        padding: 6px;
+    }
+
+    .submit-btn {
+        width: 100%;
+        padding: 10px;
+        background-color: #FF9F29;
+        color: white;
+        border: none;
+        border-radius: 4px;
+        font-size: 16px;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+    }
+
+    .submit-btn:hover {
+        background-color: #1A4D2E;
+    }
+
+    .input-row {
+        margin-bottom: 15px;
+    }
+</style>
+{% endblock extra_css %}
+
+{% block content %}
+<div class="containerr">
+    <form action="" enctype="multipart/form-data" method="post" class="login-box">
+        {% csrf_token %}
+        
+        <div class="login-header">
+            <header>Modifier Produit</header>
+        </div>
+        
+        <div class="input-row">
+            <div class="input-box">
+                <input type="text" name="name" value="{{ product.name }}" placeholder="Name Product">
+                {% if errors.name %}<span class="error">{{ errors.name }}</span>{% endif %}
+                {% if errors.name %}<span class="error">{{ errors.name }}</span>{% endif %}
+
+            </div>
+        </div>
+        
+        <div class="input-row">
+            <div class="input-box">
+                <input type="text" name="price" value="{{ product.price }}" placeholder="Price">
+                {% if errors.price %}<span class="error">{{ errors.price }}</span>{% endif %}
+            </div>
+        </div>
+        
+        <div class="input-row">
+            <div class="input-box">
+                <select name="category">
+                    {% for category in categories %}
+                    <option value="{{ category.id }}" {% if category.id == product.category.id %}selected{% endif %}>{{ category.name }}</option>
+                    {% endfor %}
+                </select>
+                {% if errors.category %}<span class="error">{{ errors.category }}</span>{% endif %}
+            </div>
+        </div>
+        
+        <div class="input-row">
+            <div class="input-box">
+                <input type="text" name="description" value="{{ product.description }}" placeholder="Description">
+                {% if errors.description %}<span class="error">{{ errors.description }}</span>{% endif %}
+            </div>
+        </div>
+        
+        <div class="input-row">
+            <div class="input-box">
+                <input type="file" name="image" placeholder="Image">
+                {% if errors.image %}<span class="error">{{ errors.image }}</span>{% endif %}
+            </div>
+        </div>
+        
+        <div class="input-row">
+            <div class="input-box">
+                <input type="text" name="brand" value="{{ product.brand }}" placeholder="Brand">
+                {% if errors.brand %}<span class="error">{{ errors.brand }}</span>{% endif %}
+            </div>
+        </div>
+        
+        <div class="input-row">
+            <div class="input-box">
+                <input type="text" name="flavor" value="{{ product.flavor }}" placeholder="Flavor">
+                {% if errors.flavor %}<span class="error">{{ errors.flavor }}</span>{% endif %}
+            </div>
+        </div>
+        
+        <div class="input-row">
+            <div class="input-box">
+                <input type="text" name="sale_price" value="{{ product.sale_price }}" placeholder="Sale Price">
+                {% if errors.sale_price %}<span class="error">{{ errors.sale_price }}</span>{% endif %}
+            </div>
+        </div>
+
+        <div class="input-row">
+            <div class="input-box">
+                <input type="text" name="quantity_stock" value="{{ product.quantity_stock}}" placeholder="quantity_stock">
+                {% if errors.sale_price %}<span class="error">{{ errors.quantity_stock }}</span>{% endif %}
+            </div>
+        </div>
+        
+        <div class="input-row">
+            <div class="input-box">
+                <input type="checkbox" name="is_sale" {% if product.is_sale %}checked{% endif %}> Is Sale
+            </div>
+        </div>
+        
+        <div class="input-submit">
+            <button type="submit" class="submit-btn" id="submit">Modifier Produit</button>
+        </div>
+    </form>
+</div>
+<br>
+<br>
+<br>
+<br>
+{% endblock content %}

@@ -1,0 +1,52 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/store/store.css' %}">
+<link rel="stylesheet" href="{% static 'css/mininav.css' %}">
+<link rel="stylesheet" href="{% static 'css/store/cart.css' %}">
+<link rel="stylesheet" href="{% static 'css/store/cart_confirm.css' %}">
+{% endblock extra_css %}
+
+{% block content %}
+{% include 'partials/mininav.html' %}
+
+<div class="cart-container">
+    <div class="cart-header">
+        <h1>
+            Commande Réservé
+            <i class="fa-solid fa-circle-check"></i>
+        </h1>
+        
+        <h3>Merci pour votre réservation</h3>
+    </div>
+    
+
+        {% for item in order.order_details_set.all %}
+        <div class="cart-item">
+            <img src="{{ item.product.image.url }}" alt="{{ item.product.name }}">
+            <div class="cart-item-details">
+                <span class="cart_name_produit">{{item.product.name}}</span>
+                <div class="cart-item-quantity">
+                    <div>
+                        Quantity : &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; {{item.quantity}}
+                    </div>
+                </div>
+            </div>
+            <div class="cart-item-price">{{item.get_total_price}}</div>
+            <div class="cart-item-remove">
+                <form method="post" action="{% url 'generate_pdf' order.id %}">
+                    {% csrf_token %}
+                    <button type="submit">Imprimer Ticket</button>
+                </form>
+            </div>
+        </div>
+        {% endfor %}
+        <div class="cart-total">
+            <span>Total:</span> 
+            {{ order.get_total_price }} DHS           
+            <a href="{% url 'store' %}" class="Retournerbtn">Retourner à la boutique</a>
+        </div>
+</div>
+{% endblock content %}

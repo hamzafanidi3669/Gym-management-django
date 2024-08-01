@@ -1,0 +1,69 @@
+
+
+
+
+
+
+
+{% extends 'base.html' %}
+{% load static %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/blog/showallnotifications.css' %}">
+<link rel="stylesheet" href="{% static 'css/mininav_blog.css' %}">
+<style>
+       footer{
+        display: none;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+{% include 'partials/mininav_blog.html' %}
+<br> <br>
+<div class="search-results">
+    <div class="h2searchresults">
+        <h2>ALL NOTIFICATIONS</h2>
+    </div>
+
+    {% if messages %}
+    <div class="container">
+        {% for message in messages %}
+        <div class="alert alert-{{ message.tags }} alert-dismissible" role="alert">
+            {{ message }}
+            <i class="fa-solid fa-xmark btn-close" data-bs-dismiss="alert" aria-label="Close" style="color: #585858;"></i>
+        </div>
+        {% endfor %}
+    </div>
+    {% endif %}
+    <div class="divnotif_users">
+        {% for notification in notifications %}
+      
+        <a href="" class="divnotification">
+            <div class="divnotif_img">
+                <img src="{{ notification.sender.photo_profil.url }}" alt="image de profil"> 
+            </div>
+         
+            {% if notification.notification_type == "follow" %}
+                <div class="content_notif">
+                 <strong>{{ notification.sender.username }} </strong> followed you
+                </div>
+            {% endif %}
+            
+            {% if notification.notification_type == "like" %}
+            <div class="content_notif">
+             <strong>{{ notification.sender.username }} </strong> liked your post
+            </div>
+            {% endif %}
+
+            {% if notification.notification_type == "comment" %}
+            <div class="content_notif">
+             <strong>{{ notification.sender.username }} </strong> commented on your post
+            </div>
+            {% endif %}
+        </a> 
+        {% endfor %}
+    </div>
+
+</div>
+{% endblock %}

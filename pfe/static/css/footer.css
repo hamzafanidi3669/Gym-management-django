@@ -1,0 +1,68 @@
+.bg-dark-custom {
+    background-color: #111111; /* Un noir très foncé */
+    color: #f8f9fa;
+    color: white!important;
+
+}
+
+footer {
+    width: 100%;
+    color: white!important;
+}
+
+footer h5 {
+    color: #28a745;
+    font-weight: bold;
+}
+
+footer a {
+    color: #f8f9fa;
+    text-decoration: none;
+    transition: color 0.3s ease;
+}
+
+footer a:hover {
+    color: #28a745;
+}
+
+.contact-info li, .programs-list li {
+    margin-bottom: 10px;
+}
+
+.programs-list i {
+    color: #28a745;
+}
+
+.newsletter-form .form-control {
+    background-color: #222;
+    border: 1px solid #333;
+    color: #fff;
+}
+
+.newsletter-form .btn-primary {
+    background-color: #28a745;
+    border-color: #28a745;
+}
+
+.newsletter-form .btn-primary:hover {
+    background-color: #218838;
+    border-color: #1e7e34;
+}
+
+.social-icons a {
+    font-size: 1.5rem;
+    color: #f8f9fa;
+    transition: color 0.3s ease;
+}
+
+.social-icons a:hover {
+    color: #28a745;
+}
+
+hr {
+    border-color: #333;
+}
+
+.list-inline-item:not(:last-child) {
+    margin-right: 15px;
+}

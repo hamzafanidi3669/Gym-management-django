@@ -1,0 +1,248 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/main.css' %}">
+<link rel="stylesheet" href="{% static 'css/pages/home.css' %}">
+{% endblock extra_css %}
+{% block content %}
+<br>
+
+
+
+
+
+
+
+
+
+<div class="containerhome">
+  {% if messages %}
+  {% for message in messages %}
+      <div class="alert alert-{{ message.tags }}">
+          {{ message }}
+      </div>
+      
+  {% endfor %}
+{% endif %}
+  <div class="containerhome-flex">
+ 
+    <div class="containerhome-left">
+      <h1 class="containerhome1strong">STRONG</h1>
+      <p class="containerhome1txt">BEAT THE ROUTINE. TRAIN AT THE CALIBER OF WORLD CHAMPIONS AND GET IN THE BEST SHAPE OF YOUR LIFE.</p>
+      <br> <br>
+      <a href="{% url 'register' %}" class="containerhome1btn">REGISTER</a>
+    </div>
+    
+    <div class="containerhome-right slide-from-right">
+      <h2 class="testimonial-title">What Our Clients Say</h2>
+      <div id="testimonial-section">
+        <!-- <h2 class="testimonial-title">What Our Clients Say</h2> -->
+        <div class="testimonial-container">
+          <div class="testimonial">
+            <img src="{% static 'image/face4.jpeg' %}" alt="Profile Picture" class="testimonial-profile">
+            <p class="testimonial-text">"Highly recommended"</p>
+            <p class="testimonial-author">- Joe Zinnbaeaur</p>
+          </div>
+          <div class="testimonial">
+            <img src="{% static 'image/face5.jpeg' %}" alt="Profile Picture" class="testimonial-profile">
+            <p class="testimonial-text">"Highly recommended for anyone serious about training."</p>
+            <p class="testimonial-author">- Mark Wilson</p>
+          </div>
+          <div class="testimonial">
+            <img src="{% static 'image/face1.jpeg' %}" alt="Profile Picture" class="testimonial-profile">
+            <p class="testimonial-text">"Great experience, the trainers are very professional!"</p>
+            <p class="testimonial-author">- John Doe</p>
+          </div>
+          <div class="testimonial">
+            <img src="{% static 'image/face2.jpeg' %}" alt="Profile Picture" class="testimonial-profile">
+            <p class="testimonial-text">"I've never felt better. The environment is amazing."</p>
+            <p class="testimonial-author">- Jane Smith</p>
+          </div>
+          <div class="testimonial">
+            <img src="{% static 'image/face3.jpeg' %}" alt="Profile Picture" class="testimonial-profile">
+            <p class="testimonial-text">"That's a really nice gym."</p>
+            <p class="testimonial-author">- Mark Wilson</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- 2parts -->
+ <div class="containerhome2">
+    <div class="titrepart2home">
+      <h2>JOIN THE TEAM</h2>
+    </div>
+    <div class="elementspart2home">
+      
+      <!-- elem1 -->
+      <div class="elem1part2home">
+
+        <div class="logoelem1part2home">
+          <img src="{% static 'image/dumbbell-svgrepo-com.svg' %}" alt="">
+
+        </div>
+
+        <div class="titreelem1part2home">
+          <h2>OPEN GYM</h2>
+        </div>
+
+        <div class="descelem1part2home">
+          <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Accusantium inventore nemo dolorum.</p>
+        </div>
+        <br>
+
+        <div class="btnelem1part2home">
+          <button>DISCOUNT -30%</button>
+        </div>
+    </div>
+
+      <!-- elem2 -->
+      <div class="elem1part2home elem2part2home">
+
+        <div class="logoelem1part2home">
+          <img src="{% static 'image/gym-weights-workout-svgrepo-com.svg' %}" alt="">
+        </div>
+
+        <div class="titreelem1part2home">
+          <h2>CROSSFIT</h2>
+        </div>
+
+        <div class="descelem1part2home">
+          <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Accusantium inventore nemo dolorum.</p>
+        </div>
+        <br>
+
+        <div class="btnelem1part2home">
+          <button>DISCOUNT -30%</button>
+        </div>
+    </div>
+
+      <!-- elem3 -->
+      <div class="elem1part2home">
+
+        <div class="logoelem1part2home">
+          <!-- <i class="fi fi-ss-boxing-glove"></i> -->
+          <img src="{% static 'image/boxing-svgrepo-com.svg' %}" alt="">
+        </div>
+
+        <div class="titreelem1part2home">
+          <h2>BOXING</h2>
+        </div>
+
+        <div class="descelem1part2home">
+          <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Accusantium inventore nemo dolorum.</p>
+        </div>
+        <br>
+
+
+        <div class="btnelem1part2home">
+          <button>DISCOUNT -30%</button>
+        </div>
+    </div>
+    
+    
+
+ </div>
+ 
+ 
+ <br>
+ <br>
+ <br>
+ <br>
+ <br>
+ <br>
+ <br>
+
+
+
+
+ <!-- prices -->
+ <div class="pricing_packs bootstrap-scope">
+  <div class="container">
+    <div class="row">
+      <div class="col-md-12 mb-12 divh1homepricing">
+        <h1>PRICING</h1>
+      </div> 
+      {% for sub in subs %}
+      <a href="{% url 'pack' sub.id %}" class="col-md-4 mb-4 divpricing_pack">
+        <br>
+        {% if sub.type == 'Premium' %}
+        <div class="price-card divpricing_pack_premium">
+        {% elif sub.type == 'Gold' %}
+        <div class="price-card divpricing_pack_gold">
+          {% else %}
+          <div class="price-card divpricing_pack_bronze">
+            {% endif %}
+      
+          {% if sub.type == 'Premium' %}
+          <div class="price-card-header price-card-header-premium">
+            <i class="fas fa-dumbbell fa-3x"></i>
+          </div>
+          {% elif sub.type == 'Gold' %}
+          <div class="price-card-header price-card-header-gold">
+            <i class="fas fa-dumbbell fa-3x"></i>
+          </div>
+          {% elif sub.type == 'Bronze' %}
+          <div class="price-card-header price-card-header-bronze">
+            <i class="fas fa-dumbbell fa-3x"></i>
+          </div>
+          {% endif%}
+          <form action="" method="post" class="price-card-body">
+            <h1 class="price-card-title"> {{sub.type}} </h1>
+            <!-- <i class="fa-solid fa-medal" style="color: #FFD43B;"></i> -->
+  
+            <h3 class="price-card-price">{{sub.price}} MAD<small></small></h3>
+            {% if sub.duration == 'Annuel' %}
+              <h5 class="price-card-title">1 YEAR</h5>
+            {% endif %}
+            <ul class="price-card-features">
+              {% if sub.access_hours == '24h'  %}
+              <li><i class="fas fa-check"></i> Access 24H/24</li>
+              {% else %}
+              <li><i class="fa-solid fa-xmark"  style="color: #942d2d;"></i> Access 24H/24</li>
+              {% endif %}
+
+              
+
+              {% if sub.class_access %}
+              <li><i class="fas fa-check"></i> Access To All Classes</li>
+              <li><i class="fas fa-check"></i> Unlimited Equipments</li>
+              {% else %}
+              <li><i class="fa-solid fa-xmark"  style="color: #942d2d;"></i>  Access To All Classes</li>
+              <li><i class="fa-solid fa-xmark"  style="color: #942d2d;"></i>  Unlimited Equipmentss</li>
+              {% endif %}
+
+              {% if sub.friend_invites > 0 %}
+              <li><i class="fas fa-check"></i> {{sub.friend_invites}} Friends Invite Included / month</li>
+              {% else %}
+              <li><i class="fa-solid fa-xmark"  style="color: #942d2d;"></i>No Friends Invite</li>
+              {% endif %}
+              {% if sub.coach_sessions %}
+              <li><i class="fas fa-check"></i> {{sub.coach_sessions}} Coaching Sessions</li>
+              {% else %}
+              <li><i class="fa-solid fa-xmark"  style="color: #942d2d;"></i>  {{sub.coach_sessions}} Coaching Sessions</li>
+              {% endif %}
+            </ul>
+            <button type="button" class="btn-join">JOIN NOW</button>
+          </form>
+        </div>
+      </a>
+      {% endfor %}
+      
+    </div>
+  </div>
+</div>
+
+
+
+{% endblock content %}
+{% block js %}
+<script src="{% static 'js/home.js' %}"></script>
+<script src="{% static 'js/main.js' %}"></script>
+
+{% endblock js %}
+

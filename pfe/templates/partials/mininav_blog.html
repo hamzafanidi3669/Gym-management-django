@@ -1,0 +1,353 @@
+<nav class="navminiblog">
+    <div class="container_mininavblog">
+
+        <div class="testmini">
+            <a class="mininav_home" href="{% url 'home' %}" id="home">
+                <!-- <i class="fa-regular fa-bell" style="color: #ffffff;"></i> -->
+                <i class="fa-solid fa-house" style="color: #ffffff;"></i>
+            </a>
+        </div>
+
+        {% if authenticated_user.type_user == 'coach' %}
+        <div class="testmini">
+            <a class="mininav_friends" href="{% url 'coach_reservations' %}">
+                <i class="fa-solid fa-dumbbell" style="color: #ffffff;"></i>
+            </a>
+        </div>
+        {% endif %}
+
+
+    
+
+        <div class="testmini">
+            <a class="mininav_notifications" href="#" id="notifications-icon">
+                <i class="fa-solid fa-bell" style="color: #ffffff;"></i>
+                <span id="unread-count" class="unread-count"></span>
+            </a>
+            <div id="quick-notifications" class="quick-notifications"></div>
+        </div>
+
+        <div class="search-bar">
+            <form id="search-form" action="{% url 'search_users' %}" method="get">
+                <i class="fa-solid fa-magnifying-glass" style="color: #ffffff;"></i>
+                <input type="search" id="search-input" name="q" placeholder="search" autocomplete="off">
+                <button type="submit" style="display: none;"></button>
+            </form>
+            <div id="quick-search-results" class="quick-search-results"></div>
+        </div>
+    </div>
+</nav>
+
+<script>
+    
+    document.addEventListener('DOMContentLoaded', function() {
+    const searchInput = document.getElementById('search-input');
+    const quickSearchResults = document.getElementById('quick-search-results');
+    const searchForm = document.getElementById('search-form');
+    const unreadCountSpan = document.getElementById('unread-count');
+    const notificationsIcon = document.getElementById('notifications-icon');
+    const quickNotifications = document.getElementById('quick-notifications');
+
+    let debounceTimer;
+
+    searchInput.addEventListener('input', function() {
+        clearTimeout(debounceTimer);
+        debounceTimer = setTimeout(() => {
+            const query = this.value;
+            if (query.length > 0) {
+                fetch(`{% url 'ajax_search_users' %}?q=${encodeURIComponent(query)}`)
+                    .then(response => response.json())
+                    .then(data => {
+                        displayQuickResults(data.results);
+                    });
+            } else {
+                quickSearchResults.innerHTML = '';
+            }
+        }, 300);
+    });
+
+    function displayQuickResults(results) {
+        quickSearchResults.innerHTML = '';
+        if (results.length > 0) {
+            const ul = document.createElement('ul');
+            results.slice(0, 5).forEach(user => {
+                const li = document.createElement('li');
+                li.innerHTML = `
+                    <a href="/blog/profile/${user.id}/">
+                        <img src="${user.photo_profil}" alt="${user.username}" width="30" height="30">
+                        ${user.username}
+                    </a>
+                `;
+                ul.appendChild(li);
+            });
+            const showAllLi = document.createElement('li');
+            showAllLi.innerHTML = '<a href="#" id="show-all-results">Show all results</a>';
+            ul.appendChild(showAllLi);
+            quickSearchResults.appendChild(ul);
+
+            document.getElementById('show-all-results').addEventListener('click', function(e) {
+                e.preventDefault();
+                searchForm.submit();
+            });
+        } else {
+            quickSearchResults.innerHTML = '<p>No results found</p>';
+        }
+    }
+
+    notificationsIcon.addEventListener('click', function(e) {
+    e.preventDefault();
+    if (quickNotifications.style.display === 'none' || quickNotifications.style.display === '') {
+        markAllNotificationsAsRead().then(() => {
+            fetch('{% url "ajax_get_notifications" %}')
+                .then(response => response.json())
+                .then(data => {
+                    displayQuickNotifications(data.notifications);
+                    quickNotifications.style.display = 'block';
+                    updateUnreadCount(0); 
+                });
+        });
+    } else {
+        quickNotifications.style.display = 'none';
+    }
+});
+
+    function displayQuickNotifications(notifications) {
+        notificationsIcon.classList.add('bellcolored');
+        quickNotifications.innerHTML = '';
+        if (notifications.length > 0) {
+            const ul = document.createElement('ul');
+            notifications.forEach(notif => {
+                const li = document.createElement('li');
+                let href;
+                switch(notif.notification_type) {
+                    case 'follow':
+                        href = `/blog/profile/${notif.sender_id}/`;
+                        break;
+                    case 'like':
+                    case 'comment':
+                        href = notif.post_id ? `/blog/post/${notif.post_id}/` : '#';
+                        break;
+                    default:
+                        href = '#';
+                }
+                li.innerHTML = `
+                    <a href="${href}" data-notification-id="${notif.id}">
+                        <img src="${notif.sender_photo}" alt="${notif.sender_username}" width="30" height="30">
+                        ${notif.sender_username} ${notif.message}
+                    </a>
+                `;
+                if (!notif.read) {
+                    li.classList.add('unread');
+                }
+                li.querySelector('a').addEventListener('click', function(e) {
+                    if (href === '#') {
+                        e.preventDefault();
+                        alert("This post no longer exists.");
+                    } else {
+                        markNotificationAsRead(notif.id, this.href);
+                    }
+                    quickNotifications.style.display = 'none';
+                });
+                ul.appendChild(li);
+            });
+            const showAllLi = document.createElement('li');
+            showAllLi.innerHTML = '<a href="/blog/show_all_notifications">Show all notifications</a>';
+            ul.appendChild(showAllLi);
+            quickNotifications.appendChild(ul);
+        } else {
+            quickNotifications.innerHTML = '<p>No notifications</p>';
+        }
+    }
+
+    function markNotificationAsRead(notificationId, redirectUrl) {
+        fetch('/blog/mark_notification_as_read/', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRFToken': getCookie('csrftoken')
+            },
+            body: JSON.stringify({ notification_id: notificationId })
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                window.location.href = redirectUrl;
+            } else {
+                console.error('Failed to mark notification as read');
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+        });
+    }
+
+    function markAllNotificationsAsRead() {
+    return fetch('/blog/mark_all_notifications_as_read/', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-CSRFToken': getCookie('csrftoken')
+        }
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (!data.success) {
+            console.error('Failed to mark all notifications as read');
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+    });
+}
+
+    function getCookie(name) {
+        let cookieValue = null;
+        if (document.cookie && document.cookie !== '') {
+            const cookies = document.cookie.split(';');
+            for (let i = 0; i < cookies.length; i++) {
+                const cookie = cookies[i].trim();
+                if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                    break;
+                }
+            }
+        }
+        return cookieValue;
+    }
+
+    document.addEventListener('click', function(event) {
+        notificationsIcon.classList.remove('bellcolored');
+        if (!quickNotifications.contains(event.target) && event.target !== notificationsIcon) {
+            quickNotifications.style.display = 'none';
+        }
+    });
+
+    function updateUnreadCount(count) {
+        unreadCountSpan.textContent = count > 0 ? count : '';
+    }
+
+    $(document).ready(function() {
+        function updateNotifications() {
+            fetch('{% url "ajax_get_notifications" %}')
+            .then(response => response.json())
+            .then(data => {
+                if (data.notifications) {
+                    const notificationsList = $('#notifications-list');
+                    notificationsList.empty();
+                    data.notifications.forEach(notification => {
+                        const notificationItem = $('<li></li>').text(notification.message);
+                        notificationsList.append(notificationItem);
+                    });
+
+                    updateUnreadCount(data.unread_count);
+                } else {
+                    console.error('Failed to retrieve notifications');
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+        }
+
+        $('#notifications-icon').on('click', updateNotifications);
+        updateNotifications();
+    });
+});
+
+</script>
+
+<style>
+   .search-bar {
+    position: relative;
+}
+
+.quick-search-results {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    width: 100%;
+    background: white;
+    border: none;
+    border-top: none;
+    max-height: 300px;
+    overflow-y: auto;
+    z-index: 1000;
+    
+}
+
+.quick-search-results ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.quick-search-results li {
+    padding: 10px;
+    border-bottom: 1px solid #eee;
+}
+
+.quick-search-results li:last-child {
+    border-bottom: none;
+}
+
+.quick-search-results a {
+    display: flex;
+    align-items: center;
+    text-decoration: none;
+    color: #333;
+}
+
+.quick-search-results img {
+    margin-right: 10px;
+    border-radius: 50%;
+}
+
+/* notif: */
+.quick-notifications {
+    position: absolute;
+    top: 100%;
+    right: 400px;
+    width: 300px;
+    background: white;
+    border: 1px solid #ddd;
+    border-top: none;
+    max-height: 400px;
+    overflow-y: auto;
+    z-index: 1000;
+    display: none;
+}
+
+.quick-notifications ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.quick-notifications li {
+    padding: 10px;
+    border-bottom: 1px solid #eee;
+}
+
+.quick-notifications li:last-child {
+    border-bottom: none;
+}
+
+.quick-notifications a {
+    display: flex;
+    align-items: center;
+    text-decoration: none;
+    color: #333;
+}
+
+.quick-notifications img {
+    margin-right: 10px;
+    border-radius: 50%;
+}
+.bellcolored i{
+    color: #FF9F29!important;
+    font-weight: 800;
+}
+.unread{
+    background-color: #e0e0e0;
+}
+</style>

@@ -1,0 +1,768 @@
+{% extends 'base.html' %}
+{% load static %}
+
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/mininav_blog.css' %}">
+<link rel="stylesheet" href="{% static 'css/blog/profile.css' %}">
+{% endblock extra_css %}
+
+{% block content %}
+{% include 'partials/mininav_blog.html' %}
+
+
+
+<div class="container_profile">
+    <div class="container_img">
+
+
+        
+        {% if couverture_pic_post_id %}
+        <a href="{% url 'view_post' couverture_pic_post_id %}">
+            <img src="{{ user.photo_couverture.url }}" alt="Profil">
+        </a>
+         {% else %}
+        <img src="{{ user.photo_couverture.url }}" alt="Profil">
+        {% endif %}
+        
+
+
+        {% if authenticated_user.id == user.id %}
+            {% if couverture_pic_post_id %}
+
+
+        <form action="{% url 'update_photo_couverture' couverture_pic_post_id %}" method="post" enctype="multipart/form-data" class="img_profil">
+            {% csrf_token %}
+            <label for="file-input_couverture" class="image_link_modify">
+                <i class="fa-solid fa-camera" style="color: #000;"></i> modifier la photo de couverture
+            </label>
+            <input id="file-input_couverture" name="couvertureimage" type="file" style="display: none;" onchange="this.form.submit()"/>
+           
+        </form>
+        {% else %}
+        <form action="{% url 'update_photo_couverture' 0 %}" method="post" enctype="multipart/form-data" class="img_profil">
+            {% csrf_token %}
+            <label for="file-input_couverture" class="image_link_modify">
+                <i class="fa-solid fa-camera" style="color: #000;"></i> définir la photo de couverture
+            </label>
+            <input id="file-input_couverture" name="couvertureimage" type="file" style="display: none;" onchange="this.form.submit()"/>
+        </form>
+         {% endif %}
+        {% endif %}
+
+
+
+    </div>
+    <div class="container_info">
+        <div class="info_profil">
+            <br>
+
+            <form action="{% if profile_pic_post_id %}{% url 'update_photo_prfl' profile_pic_post_id %}{% else %}{% url 'update_photo_prfl' 0 %}{% endif %}" method="post" enctype="multipart/form-data" class="img_profil">
+                {% csrf_token %}
+                {% if authenticated_user.id == user.id %}
+                    <label for="file-input_profil" class="link_img_prfl">
+                        <i class="fa-solid fa-camera" style="color: #000;"></i>
+                    </label>
+                    <input id="file-input_profil" name="profilimage" type="file" style="display: none;" onchange="this.form.submit()"/>
+                {% endif %}
+                {% if profile_pic_post_id %}
+                    <a href="{% url 'view_post' profile_pic_post_id %}">
+                        <img src="{{ user.photo_profil.url }}" alt="Profil">
+                    </a>
+                {% else %}
+                    <img src="{{ user.photo_profil.url }}" alt="Profil">
+                {% endif %}
+            </form>
+
+            <div class="nom_profil">
+                <h2>{{ user.first_name }} {{ user.last_name }}
+               {% if user.is_authenticated and user.is_verified and user.type_user == "moderateur" %}
+                    <img src="{% static 'image/verified-check-svgrepo-com.svg' %}" alt="Vérifié">
+                {% endif %}
+
+                {% if user.is_authenticated and user.is_verified and user.type_user == "coach" %}
+                    <img src="{% static 'image/verified-check-svgrepo-com.svg' %}" alt="Vérifié">
+                {% endif %}
+
+                {% if user.is_authenticated and user.is_verified and user.type_user == "admin" %}
+                    <img src="{% static 'image/verified-check-svgrepo-comm.svg' %}" alt="Vérifié">
+                {% endif %}
+                
+       
+                </h2>
+                <p>@{{ user.username }}</p>
+            </div>
+
+            
+            <br>
+            <div class="bio_profil">
+                <p>{{ user.bio_user }}</p>
+            </div>
+                {% if user.type_user == 'coach' %}
+                {% if user.id != authenticated_user.id %}
+                    <form action="{% url 'dispo_coach' user.id %}" method="post" class="">
+
+                        {% csrf_token %}
+
+                        <div class="btnfollowprofile">
+                            <input type="hidden" name="salam" value="{{user.id}}" id="">
+                            <button class="button-86">DISPONIBILTY</button>
+                        </div>
+                    </form>
+                {% endif %}
+                {% endif %}
+            <br>
+            <div class="supplementary_profil">
+                <div class="photosvideos_user_div">
+                    <span>
+                        <i class="fa-solid fa-users" style="color: #646464;"></i>
+                    </span> &nbsp;
+
+                    <span>{{followers}} followers</span>
+                </div>
+                <div class="ville_user_div">
+                    <span><i class="fa-solid fa-location-dot" style="color: #646464;"></i></span> &nbsp;
+                    <span>{{ user.ville_user }}</span>
+                </div>
+                <div class="date_user_div">
+                    <span><i class="fa-regular fa-calendar" style="color: #646464;"></i></span> &nbsp;
+                    <span>{{ user.date_joined|date:"F Y" }}</span>
+                </div>
+                
+            </div>
+            <br>
+        </div>
+
+        <!-- Cont profil -->
+        <div class="content_profile">
+            <div class="titles_limen_profile">
+                <div class="title1_profile">
+                    <a href="{% url 'profile_status' user.id %}" class="{% if is_status_active %}active{% endif %}">Statut</a>
+
+                </div>
+                <div class="title2_profile">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                    <a href="{% url 'profile_media' user.id %}" class="{% if is_media_active %}active{% endif %}">Médias</a>
+                </div>
+            </div>
+            <div class="content_profile_txt">
+                {% if authenticated_user != user %}
+                    {% if user.is_followed %}
+                <div class="btnformglobal">
+                    <form action="{% url 'cancel_friend_request' user.username  %}" method="post" class="btnform">
+                        {% csrf_token %}
+                        <div class="btnfollowprofile">
+                            <input type="hidden" name="salam" value="{{user.id}}" id="">
+                            <button class="button-86">FOLLOWED</button>
+                        </div>
+                    </form>
+    
+                </div>
+                    {% else %}
+                <div class="btnformglobal">
+                    <form action="{% url 'send_friend_request' user.username  %}" method="post" class="btnform">
+                        {% csrf_token %}
+                        <div class="btnfollowprofile">
+                            <input type="hidden" name="salam" value="{{user.id}}" id="">
+                            <button class="button-86">FOLLOW</button>
+                        </div>
+                    </form>
+                </div>
+                    {% endif %}
+                  
+
+            {% endif %}
+                
+                {% if messages %}
+                <div class="container">
+                    {% for message in messages %}
+                    <div class="alert alert-{{ message.tags }} alert-dismissible" role="alert">
+                        {{ message }}
+                        <!-- <button type="button" class="" ></button> -->
+                        <i class="fa-solid fa-xmark btn-close" data-bs-dismiss="alert" aria-label="Close" style="color: #585858;"></i>
+                    </div>
+                    {% endfor %}
+                </div>
+                {% endif %}
+
+
+
+                {% if authenticated_user.id == user.id %}
+                <!-- addpost -->
+                <form action="{% url 'add_post' %}" method="post" class="divstatus_profile divstatus_profile_form"  enctype="multipart/form-data">
+                    {% csrf_token %}
+                    <div class="divimg_profile_line1">
+                    {% if user.photo_profil %}
+                        <div class="divimg_profile">
+                            <img src="{{ user.photo_profil.url }}" alt="Profil">
+                        </div>
+                    {% endif %}
+                        <div class="divname_profile">
+                            <p>{{ user.first_name }} {{ user.last_name }}</p>
+                        </div>
+                        <div class="divusername_profile">
+                            <p>@{{ user.username }}</p>
+                        </div>
+                        <div class="divinfo_profile">
+                        
+                           
+                        </div>
+                    </div>
+                    <div class="divstatus_profile_line2">
+                        <div class="namedivtxt">
+                            <textarea name="content" placeholder="What's on your mind ? {{user.first_name}}" class="textareaprofile" id=""></textarea>
+                            
+                          
+                        </div>
+                    </div>
+
+                        <div  class="divstatus_profile_line3 line3adds">
+               
+                            <div class="fileaddpost">
+                                <label for="file-input" id="file-add-post-label">
+                                    <i class="fa-regular fa-image imagelogoprofile" id="file-add-post-icon" style="color: #a7a7a7;"></i>
+                                </label>
+                                <input id="file-input" name="postimage" type="file"/>
+                            </div>
+                            <div class="addpostbtn">
+                                <button>Add Post</button>
+                            </div>
+                        </div>
+                </form>
+    
+                {% endif %}
+
+                {% if not posts %}
+                <div class="nopostavailable bootstrap-scope">
+                    <div class="p_nopostavailable">
+                        <p>NO POST AVAILABLE FOR THE MOMENT</p>
+
+                    </div>
+                    
+                </div>
+                {% endif %}
+
+
+               
+
+
+                <!-- Div dynamique -->
+                {% for post in posts %}
+                
+                
+                <div class="divstatus_profile divstatus_profile_tst" id="post-{{ post.id }}">
+                    <div class="divimg_profile_line1">
+                {% if user.photo_profil %}
+                        <div class="divimg_profile">
+                            <img src="{{ user.photo_profil.url }}" alt="Profil">
+                        </div>
+                {% endif %}
+                        <div class="divname_profile">
+                            <p>{{ user.first_name }} {{ user.last_name }}</p>
+                        </div>
+                        <div class="divusername_profile">
+                            <p>@{{ user.username }}</p>
+                        </div>
+                        <div class="divinfo_profile">
+                        
+                            <div class="time_since">
+                                <p>{{ post.created_at|timesince }} ago</p>
+                            </div>
+                            
+                            {% if post.author == authenticated_user or authenticated_user.type_user == 'admin' or authenticated_user.type_user == 'moderateur'   %}
+                            <div class="points_info">
+                                <i class="fa-solid fa-ellipsis-vertical dropdown-toggle" style="color: #000000;"></i>
+                                    <div class="dropdown-menu">
+         
+                                        <form action="{% url 'delete_post' post.id %}" method="post" style="display:inline;">
+                                            {% csrf_token %}
+                                            <button type="submit" class="profileeditbtn" style="border:none; padding:12px 16px; cursor:pointer;">Delete</button>
+                                        </form>
+                                    </div>
+                            </div>
+                            {% endif %}
+                        </div>
+                    </div>
+                    <!-- line 2 -->
+
+                    <div class="divstatus_profile_line2">
+                        <form method="post" action="{% url 'edit_post' post.id %}" enctype="multipart/form-data" class="namedivtxt">
+                            {% csrf_token %}
+                            <textarea name="content_edit" class="content-edit" {% if authenticated_user.id != post.author.id %}readonly{% endif %}>{{ post.content }}</textarea>
+
+                            {% if post.postimage %}
+                            {% if post.media_type == "photo" %}
+                                <a href="/blog/post/{{post.id}}" class="divimgpost">
+                                    <img src="{{ post.postimage.url }}" class="post_image_profile" />
+                                </a>
+                            {% else %}
+                                <a href="/blog/post/{{post.id}}" class="divimgpost">
+                                    <!-- <video src="{{ post.postimage.url }}" class="post_image_profile"></video> -->
+                                    <video class="post_media post_image_profile" controls>
+                                        <source src="{{ post.postimage.url }}" type="video/mp4">
+                                        Your browser does not support the video tag.
+                                    </video>
+                                </a>
+                            {% endif %}
+                            {% endif %}
+                         
+                            <div class="imglogo_modifierbtn">
+                                <label for="file-input-{{ post.id }}" class="imagelogoprofilee">
+                                    <i class="fa-regular fa-image" style="color: #a7a7a7;"></i>
+                                </label>
+                                <input id="file-input-{{ post.id }}" name="postimagee" type="file" style="display: none;"/>
+                                <div class="modifierbtn_modifier">
+                                    <button type="submit" class="modify-btn">Modifier</button>
+                                </div>
+                            </div>     
+                        </form>
+                    </div>
+                    
+                    <!-- line 3 -->
+                    <div class="divstatus_profile_line3">
+                        <form action="{% url 'like_unlike_post' post.author.id %}" method="post" class="like-form" id="{{ post.id }}">
+                            {% csrf_token %}
+                            <input type="hidden" name="post_id" value="{{ post.id }}">
+                            <button type="submit" class="like-button">
+                                {% if post.user_has_liked %}
+                                    <i class="fa-solid fa-heart" style="color: #ff7a7a;"></i>
+                                {% else %}
+                                    <i class="fa-regular fa-heart" style="color: #000000;"></i>
+                                {% endif %}
+                            </button>
+                            <div class="like-count like-count{{ post.id }}">{{ post.likes.count }}</div>
+                        </form>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                        &nbsp;&nbsp;&nbsp;
+                        <div class="commentsection">
+                            <button class="commentlogoprofile"  data-post-id="{{ post.id }}">
+                                <i class="fa-regular fa-comment" style="color: #000000;"></i>
+                            </button>
+                     
+                            <div class="commentcoun comment-count{{post.id}}">
+                                {{ post.comments.count }}
+                            </div>
+                        </div>
+                        
+                    </div>
+
+
+                      <!-- <div class="blur-overlay"></div> -->
+                    <div id="commentModal-{{ post.id }}" class="comment-modal">
+                        <div class="modal-content">
+                            <span class="close-modal">&times;</span>
+                            <h2>Commentaires</h2>
+                            <div class="all-comments">
+                                {% for comment in post.comments.all %}
+                                <div class="comment">
+                                    <div class="comment-header">
+                                    {% if user.photo_profil %}
+
+                                        <img src="{{ comment.author.photo_profil.url }}" alt="{{ comment.author.username }}" class="comment-avatar">
+                                    {% endif %}
+                                        <strong>{{ comment.author.username }}</strong>
+                                        <span class="comment-date">{{ comment.created_at|date:"F d, Y, H:i" }}</span>
+                                    </div>
+                                    <div class="comment-content">
+                                        {{ comment.content }}
+                                    </div>
+                                </div>
+                                {% endfor %}
+                            </div>
+                            <form action="{% url 'add_comment' post.author.id %}" method="post" class="comment-form" data-post-id="{{ post.id }}">
+                                {% csrf_token %}
+                                <input type="hidden" name="post_id" value="{{ post.id }}">
+                                <input type="hidden" name="usernamee" value="{{user.username}}">
+                                <input type="text" name="modal_content" placeholder="Add comment" required>
+                                <button type="submit">Envoyer</button>
+                            </form>
+                        </div>
+                    </div>
+
+                   
+                  
+
+                    <div class="divstatus_profile_line4">
+                       
+
+                        <div class="comments-section" id="comments-{{ post.id }}">
+                            {% for comment in post.latest_comments %}
+                            <div class="comment">
+                                <div class="commentauthor_content">
+                                    <strong>{{ comment.author.username }}:</strong>
+                                    {{ comment.content }}
+                                </div>
+                                <div class="comment-date">{{ comment.created_at|date:"F d, Y, H:i" }}</div>
+                            </div>
+                            {% endfor %}
+                        </div>
+
+
+                        <form action="{% url 'add_comment' post.author.id %}" method="post" class="comment-form" data-post-id="{{ post.id }}">
+                            {% csrf_token %}
+                     
+                          <input type="hidden" name="post_id" value="{{post.id}}">
+                            <div class="addinputcomment">
+                                <input type="text" name="inline_content" placeholder="Add comment" required>
+                            </div>
+                            <div class="addbtncomment">
+                                <button type="submit">Add</button>
+                            </div>
+                        </form>
+                        
+                    </div>
+                    
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+{% endblock content %}
+
+
+
+{% block js %}
+
+<script>
+    var authenticatedUserId = "{{ request.user.id }}"; // id dyal user authentifié
+    var currentUserId = "{{ user.id }}"; // id dl user lli kancompariwi maah
+</script>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+
+$(document).ready(function() { 
+    $('.like-form').on('submit', function(e) { 
+        e.preventDefault(); 
+
+        const form = $(this);
+        const post_id = form.find('input[name="post_id"]').val();
+        const url = form.attr('action');
+       
+
+        $.ajax({
+            type: 'POST',
+            url: url,
+            data: {
+                'csrfmiddlewaretoken': $('input[name=csrfmiddlewaretoken]').val(),
+                'post_id': post_id,
+            },
+            success: function(response) {
+                const likeButton = form.find('button');
+                const likeIcon = likeButton.find('i');
+                const likeCount = form.find('.like-count' + post_id);
+
+                if (response.liked) { 
+                    // ila kant true
+                    likeIcon.removeClass('fa-regular fa-heart').addClass('fa-solid fa-heart').css('color', '#ff7a7a');
+                } else {
+                    likeIcon.removeClass('fa-solid fa-heart').addClass('fa-regular fa-heart').css('color', '#000000');
+                }
+
+                likeCount.text(response.likes); 
+
+                console.log('Like updated successfully');
+            },
+            error: function(xhr, status, error) {
+                console.error('Error updating like:', error);
+            }
+        });
+    });
+});
+
+// dropdown
+$(document).ready(function() {
+    
+    $(".dropdown-toggle").on("click", function(event) {
+        event.stopPropagation();
+        let dropdown = $(this).next(".dropdown-menu");
+        $(".dropdown-menu").not(dropdown).hide(); 
+        dropdown.toggle(); 
+    });
+
+    $(window).on("click", function() {
+        $(".dropdown-menu").hide();
+    });
+
+    $(".dropdown-menu").on("click", function(event) {
+        event.stopPropagation();
+    });
+});
+
+
+$(document).ready(function() {
+    function shouldStayActive(form) {
+        var textarea = form.find('.content-edit');
+        var fileInput = form.find('input[type="file"]');
+        return textarea.val().trim() !== '' || fileInput.val() !== '';
+    }
+
+    function isAuthenticatedAndCurrentUser() {
+        return authenticatedUserId === currentUserId;
+    }
+
+    function resetImageIconColor(form) {
+        var imageIcon = form.find('.imagelogoprofilee i');
+        imageIcon.css('color', '#a7a7a7');
+    }
+
+    $('.content-edit').on('focus', function() {
+        if ($(this).attr('readonly')) {
+            $(this).blur(); 
+            return false;
+        }
+        var form = $(this).closest('form');
+        if (isAuthenticatedAndCurrentUser()) {
+            form.find('.modify-btn, .imagelogoprofilee').show();
+        }
+    });
+
+    $('.imagelogoprofilee').on('click', function(e) {
+        e.preventDefault();
+        e.stopPropagation();
+        if (isAuthenticatedAndCurrentUser()) {
+            $(this).closest('form').find('input[type="file"]').click();
+        }
+    });
+
+    $('input[type="file"]').on('change', function() {
+        var form = $(this).closest('form');
+        var imageIcon = form.find('.imagelogoprofilee i');
+        
+        if (isAuthenticatedAndCurrentUser()) {
+            form.find('.modify-btn, .imagelogoprofilee').show();
+            
+            if (this.files && this.files[0]) {
+                imageIcon.css('color', '#4CAF50');
+            } else {
+                imageIcon.css('color', '#a7a7a7');
+            }
+        }
+    });
+
+    $('.content-edit').on('blur', function() {
+        if ($(this).attr('readonly')) return;
+        var form = $(this).closest('form');
+        setTimeout(function() {
+            if (!form.find('.modify-btn, .imagelogoprofilee, input[type="file"]').is(':hover') && !shouldStayActive(form)) {
+                form.find('.modify-btn, .imagelogoprofilee').hide();
+                resetImageIconColor(form);
+            }
+        }, 200);
+    });
+
+    $('.content-edit').on('input', function() {
+        if ($(this).attr('readonly')) return; 
+        var form = $(this).closest('form');
+        if (isAuthenticatedAndCurrentUser()) {
+            if ($(this).val().trim() !== '') {
+                form.find('.modify-btn, .imagelogoprofilee').show();
+            } else if (!shouldStayActive(form)) {
+                form.find('.modify-btn, .imagelogoprofilee').hide();
+                resetImageIconColor(form);
+            }
+        }
+    });
+
+    $('.content-edit[readonly]').on('copy paste cut', function(e) {
+        e.preventDefault();
+    });
+});
+document.addEventListener('DOMContentLoaded', function() {
+    var closeButtons = document.querySelectorAll('.alert .btn-close');
+    closeButtons.forEach(function(button) {
+        button.addEventListener('click', function() {
+            this.closest('.alert').remove();
+        });
+    });
+});
+
+// comment
+$('.comment-form').on('submit', function(e) {
+    e.preventDefault();
+    const form = $(this);
+    const post_id = form.data('post-id');
+    const url = form.attr('action');
+    const modal_content = form.find('input[name="modal_content"]').val();
+    const inline_content = form.find('input[name="inline_content"]').val();
+    const csrf_token = form.find('input[name="csrfmiddlewaretoken"]').val();
+
+    let content;
+    if (modal_content) {
+        content = modal_content;
+    } else if (inline_content) {
+        content = inline_content;
+    } else {
+        console.error('No content found');
+        return;
+    }
+
+    $.ajax({
+        type: 'POST',
+        url: url,
+        data: {
+            'csrfmiddlewaretoken': csrf_token,
+            'post_id': post_id,
+            'content': content,
+        },
+        success: function(response) {
+            if (response.success) {
+                const commentSection = $('#comments-' + post_id);
+                const newComment = `
+                    <div class="comment">
+                        <div class="commentauthor_content">
+                        <strong>${response.author}:</strong> 
+                        ${response.content}
+                        </div>
+                        <div class="comment-date">${response.created_at}</div>
+                    </div>`;
+                
+                commentSection.append(newComment);
+                form[0].reset();
+
+                // Update comment count
+                $('.comment-count' + post_id).text(response.comments_count);
+                
+                $('#commentModal-' + post_id + ' .comment-count').text(response.comments_count);
+
+                console.log("Comment added successfully");
+            } else {
+                alert('Error: ' + response.error);
+            }
+        },
+        error: function(xhr, status, error) {
+            let errorMessage = 'An error occurred while adding the comment.';
+            if (xhr.responseJSON && xhr.responseJSON.error) {
+                errorMessage = xhr.responseJSON.error;
+            }
+            alert('Error: ' + errorMessage);
+        }
+    });
+});
+
+
+$(document).ready(function() {
+    function disableScrollAndBlur() {
+        $('body').css('overflow', 'hidden');
+    }
+
+    function enableScrollAndUnblur() {
+        $('body').css('overflow', '');
+    }
+
+    function formatDate(dateString) {
+        const date = new Date(dateString);
+        return date.toLocaleString('fr-FR', { year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit' });
+    }
+
+    // lmodel
+    $('.commentlogoprofile').on('click', function() {
+        const postId = $(this).data('post-id');
+        const modal = $(`#commentModal-${postId}`);
+        modal.fadeIn(300);
+        disableScrollAndBlur();
+    });
+
+    $('.close-modal').on('click', function() {
+        $(this).closest('.comment-modal').fadeOut(300, enableScrollAndUnblur);
+    });
+
+    // Fermer lmodel
+    $(document).on('click', function(event) {
+        if ($(event.target).hasClass('comment-modal')) {
+            $('.comment-modal').fadeOut(300, enableScrollAndUnblur);
+        }
+    });
+
+    $('.modal-content').on('click', function(event) {
+        event.stopPropagation();
+    });
+
+    $('.comment-form').on('submit', function(e) {
+        e.preventDefault();
+        const form = $(this);
+        const postId = form.data('post-id');
+        const content = form.find('input[name="content"]').val();
+        $.ajax({
+            url: form.attr('action'),
+            type: 'POST',
+            data: form.serialize(),
+            success: function(response) {
+                if (response.success) {
+                    const newComment = `
+                        <div class="comment">
+                            <div class="comment-header">
+                                <img src="${response.profilpic}" alt="${response.author}" class="comment-avatar">
+                                <strong>${response.author}</strong>
+                                <span class="comment-date">${formatDate(response.created_at)}</span>
+                            </div>
+                            <div class="comment-content">${response.content}</div>
+                        </div>
+                    `;
+                    form.siblings('.all-comments').append(newComment);
+                    form.find('input[name="content"]').val('');
+                    console.log('Comment added to post:', postId);
+
+                    // updati lcomment
+                    const commentCount = $(`.commentcount[data-post-id="${postId}"]`);
+                    commentCount.text(parseInt(commentCount.text()) + 1);
+                } else {
+                    console.error('Error adding comment:', response.error);
+                }
+            },
+            error: function(xhr, status, error) {
+                console.error('AJAX error:', status, error);
+            }
+        });
+    });
+
+    $('.comment-date').each(function() {
+        const dateString = $(this).text();
+        $(this).text(formatDate(dateString));
+    });
+
+});
+
+
+
+document.addEventListener('DOMContentLoaded', function() {
+    var posts = document.querySelectorAll('.divstatus_profile');
+    posts.forEach(function(post) {
+        post.addEventListener('click', function(e) {
+ 
+            if (!e.target.closest('form') && !e.target.closest('button') && !e.target.closest('a')) {
+                var postId = this.id.split('-')[1];
+                window.location.href = '/blog/post/' + postId + '/';  
+            }
+        });
+    });
+});
+
+
+
+$(document).ready(function() {
+    $('#file-add-post-label').on('click', function(e) {
+        e.preventDefault();
+        $('#file-input').click();
+    });
+
+    $('#file-input').on('change', function() {
+        var imageIcon = $('#file-add-post-icon');
+        
+        if (this.files && this.files[0]) {
+            imageIcon.css('color', '#4CAF50'); 
+        } else {
+            imageIcon.css('color', '#a7a7a7');
+        }
+    });
+
+    $('.content-edit[readonly]').on('copy paste cut', function(e) {
+        e.preventDefault();
+    });
+});
+
+
+</script>
+{% endblock js %}

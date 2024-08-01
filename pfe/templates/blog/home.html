@@ -1,0 +1,536 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/mininav_blog.css' %}">
+<link rel="stylesheet" href="{% static 'css/blog/home.css' %}">
+<style>
+    footer{
+        display: none;
+    }
+    .container_profile {
+        max-width: 680px;
+        margin: 20px auto;
+        padding: 0 15px;
+    }
+    .divstatus_profile {
+        background-color: #fff;
+        border-radius: 8px;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+        margin-bottom: 20px;
+        padding: 15px;
+    }
+    .create-post {
+        display: flex;
+        align-items: center;
+    }
+    .profile-pic {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        margin-right: 10px;
+    }
+    .add-post-form {
+        flex-grow: 1;
+        display: flex;
+        align-items: center;
+    }
+    .content-edit {
+        flex-grow: 1;
+        border: none;
+        background-color: #f0f2f5;
+        padding: 10px 15px;
+        border-radius: 20px;
+        margin-right: 10px;
+        resize: none;
+    }
+    .modify-btn, .comment-form button {
+        background-color: #1A4D2E;
+        color: #fff;
+        border: none;
+        padding: 8px 15px;
+        border-radius: 6px;
+        cursor: pointer;
+        font-weight: bold;
+    }
+    .imagelogoprofilee {
+        cursor: pointer;
+        margin-left: 10px;
+        color: #65676b;
+    }
+    .post-header {
+        display: flex;
+        align-items: center;
+        margin-bottom: 10px;
+    }
+    .post-info h3 {
+        margin: 0;
+        font-size: 14px;
+        font-weight: bold;
+    }
+    .post-time {
+        color: #65676b;
+        font-size: 12px;
+        margin: 0;
+    }
+    .post-actions {
+        border-top: 1px solid #e4e6eb;
+        border-bottom: 1px solid #e4e6eb;
+        padding: 10px 0;
+        margin: 10px 0;
+    }
+    .like-button, .commentlogoprofile {
+        background: none;
+        border: none;
+        color: #65676b;
+        font-size: 14px;
+        cursor: pointer;
+        padding: 6px 10px;
+        font-weight: bold;
+    }
+    .like-button.liked i {
+        color: #ff0000;
+    }
+    .comment-form {
+        display: flex;
+        margin-top: 10px;
+    }
+    .comment-form input[type="text"] {
+        flex-grow: 1;
+        border: none;
+        background-color: #f0f2f5;
+        padding: 8px 12px;
+        border-radius: 20px;
+        margin-right: 8px;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+{% include 'partials/mininav_blog.html' %}
+<br><br>
+<div class="container_profile">
+    <div class="main-content">
+        <div class="create-post divstatus_profile">
+            <img src="{{ authenticated_user.photo_profil.url }}" alt="{{ authenticated_user.username }}" class="profile-pic">
+            <form action="{% url 'add_post' %}" method="post" enctype="multipart/form-data" class="add-post-form">
+                {% csrf_token %}
+                <textarea name="content" class="content-edit" placeholder="Quoi de neuf, {{ authenticated_user.first_name }}?"></textarea>
+                <button type="submit" class="modify-btn">Publier</button>
+                <label for="file-input" class="imagelogoprofilee">
+                    <i class="fas fa-image" id="file-add-post-icon"></i>
+                </label>
+                <input type="file" name="postimage" id="file-input" style="display: none;">
+            </form>
+        </div>
+        {% for post in posts %}
+        <div class="divstatus_profile" id="post-{{ post.id }}">
+            <div class="post-header">
+                <img src="{{ post.author.photo_profil.url }}" alt="{{ post.author.username }}" class="profile-pic">
+                <div class="post-info">
+                    <h3>{{ post.author.first_name }} {{ post.author.last_name }}</h3>
+                    <p class="post-time">{{ post.created_at|timesince }} ago</p>
+                </div>
+            </div>
+            <div class="post-content">
+                <p>{{ post.content }}</p>
+                {% if post.postimage %}
+                {% if post.media_type == "photo" %}
+                <a href="/blog/post/{{post.id}}">
+                    <img src="{{ post.postimage.url }}" alt="Post image" class="post-image">
+                </a>
+                {% else %}
+                <a href="/blog/post/{{post.id}}">
+                    <video class="post_media post_image_profile" controls>
+                        <source src="{{ post.postimage.url }}" type="video/mp4">
+                        Your browser does not support the video tag.
+                    </video>
+                </a>
+
+                {% endif %}
+                {% endif %}
+            </div>
+            <div class="post-actions">
+                <div class="like-comment-counts">
+                    <span class="like-count{{ post.id }}">{{ post.likes.count }} likes</span>
+                    <span class="comment-count{{ post.id }}">{{ post.comments.count }} comments</span>
+                </div>
+                <div class="action-buttons">
+                    <form action="{% url 'like_unlike_post' post.author.id %}" method="post" class="like-form">
+                        {% csrf_token %}
+                        <input type="hidden" name="post_id" value="{{ post.id }}">
+                        <button type="submit" class="like-button {% if post.user_has_liked %}liked{% endif %}">
+                            <i class="fa-heart {% if post.user_has_liked %}fa-solid{% else %}fa-regular{% endif %}"></i> Like
+                        </button>
+                    </form>
+                    <button class="commentlogoprofile" data-post-id="{{ post.id }}">
+                        <i class="far fa-comment"></i> Comment
+                    </button>
+                 
+                </div>
+            </div>
+            
+            <div class="comments-section" id="comments-{{ post.id }}">
+                {% for comment in post.latest_comments %}
+                <div class="comment">
+                    <div class="commentauthor_content">
+                        <strong>{{ comment.author.username }}:</strong> 
+                        {{ comment.content }} 
+                    </div>
+                    <div class="comment-date">{{ comment.created_at|timesince }} ago</div>
+                </div>
+                {% endfor %}
+            </div>
+
+      
+            <!-- ga3 les comments-->
+            <div class="all-comments-overlay" id="all-comments-{{ post.id }}" style="display: none;">
+                <div class="all-comments-content">
+                    <h2>Commentaires</h2>
+                    <button class="close-comments">&times;</button>
+                    {% for comment in post.all_comments %}
+                    <div class="comment">
+                        <img src="{{ comment.author.photo_profil.url }}" alt="{{ comment.author.username }}" class="comment-profile-pic">
+                        <div class="comment-details">
+                            <strong>{{ comment.author.username }}</strong>
+                            <span class="comment-content">{{ comment.content }}</span>
+                            <span class="comment-date">{{ comment.created_at|date:"d F Y à H:i" }}</span>
+                        </div>
+                    </div>
+                    {% endfor %}
+                    <form action="{% url 'add_comment' post.author.id %}" data-post-id="{{ post.id }}" method="post" class="add-comment-section">
+                        {% csrf_token %}
+                        <input type="hidden" name="post_id" value="{{ post.id }}">
+                        <input type="hidden" name="usernamee" value="{{user.username}}">
+                        <input type="text" name="content" placeholder="Add comment" class="add-comment-input" required>
+                        
+                        <!-- <input type="text" placeholder="Add comment" class="add-comment-input"> -->
+                        <button class="add-comment-btn">Envoyer</button>
+                    </form>
+                </div>
+            </div>
+            
+            <form action="{% url 'add_comment' post.author.id %}" method="post" class="comment-form" data-post-id="{{ post.id }}">
+                {% csrf_token %}
+                <input type="hidden" name="post_id" value="{{ post.id }}">
+                <input type="text" name="content" placeholder="Write a comment..." required>
+                <button type="submit">Post</button>
+            </form>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}
+
+
+
+
+
+
+
+
+
+
+{% block js %}
+<script>
+    var authenticatedUserId = "{{ request.user.id }}"; // ID de l'utilisateur authentifié
+    var currentUserId = "{{ user.id }}"; // ID de l'utilisateur que vous comparez
+</script>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    
+$(document).ready(function() {
+
+    // Gestion des likes
+    $('.like-form').on('submit', function(e) {
+    e.preventDefault();
+    const form = $(this);
+    const post_id = form.find('input[name="post_id"]').val();
+    const url = form.attr('action');
+
+    $.ajax({
+        type: 'POST',
+        url: url,
+        data: form.serialize(),
+        success: function(response) {
+            const likeButton = form.find('.like-button');
+            const likeIcon = likeButton.find('i');
+            const likeCount = $('.like-count' + post_id);
+
+            if (response.liked) {
+                likeIcon.removeClass('fa-regular').addClass('fa-solid').css('color', '#ff0000');
+                likeButton.addClass('liked');
+            } else {
+                likeIcon.removeClass('fa-solid').addClass('fa-regular').css('color', '#000000');
+                likeButton.removeClass('liked');
+            }
+
+            likeCount.text(response.likes + ' likes');
+        },
+        error: function(xhr, status, error) {
+            console.error('Error updating like:', error);
+        }
+    });
+});
+
+    // Gestion des commentaires
+    $('.comment-form').on('submit', function(e) {
+    e.preventDefault();
+    const form = $(this);
+    const post_id = form.data('post-id');
+    const url = form.attr('action');
+    const content = form.find('input[name="content"]').val();
+
+    $.ajax({
+        type: 'POST',
+        url: url,
+        data: form.serialize(),
+        success: function(response) {
+            if (response.success) {
+                const commentSection = $('#comments-' + post_id);
+                const newComment = `
+                    <div class="comment">
+                        <div class="commentauthor_content">
+                            <strong>${response.author}:</strong> 
+                            ${response.content}
+                        </div>
+                        <div class="comment-date">${response.created_at}</div>
+                    </div>`;
+                
+                commentSection.append(newComment);
+                form[0].reset();
+
+                // Update comment count
+                $('.comment-count' + post_id).text(response.comments_count + ' comments');
+            } else {
+                alert('Error: ' + response.error);
+            }
+        },
+        error: function(xhr, status, error) {
+            let errorMessage = 'An error occurred while adding the comment.';
+            if (xhr.responseJSON && xhr.responseJSON.error) {
+                errorMessage = xhr.responseJSON.error;
+            }
+            alert('Error: ' + errorMessage);
+        }
+    });
+});
+
+
+// Affichage de la modale de commentaires
+    $('.commentlogoprofile').on('click', function() {
+        const postId = $(this).data('post-id');
+        const modal = $(`#commentModal-${postId}`);
+        modal.fadeIn(300);
+        $('body').css('overflow', 'hidden');
+    });
+
+    // Fermer la modale
+    $('.close-modal').on('click', function() {
+        $(this).closest('.comment-modal').fadeOut(300, function() {
+            $('body').css('overflow', '');
+        });
+    });
+
+    // Fermer la modale si on clique en dehors
+    $(document).on('click', function(event) {
+        if ($(event.target).hasClass('comment-modal')) {
+            $('.comment-modal').fadeOut(300, function() {
+                $('body').css('overflow', '');
+            });
+        }
+    });
+
+    // Empêcher la propagation du clic à l'intérieur de la modale
+    $('.modal-content').on('click', function(event) {
+        event.stopPropagation();
+    });
+
+    // Gestion de l'ajout d'image au post
+    $('#file-input').on('change', function() {
+        var imageIcon = $('#file-add-post-icon');
+        
+        if (this.files && this.files[0]) {
+            imageIcon.css('color', '#4CAF50');
+        } else {
+            imageIcon.css('color', '#a7a7a7');
+        }
+    });
+
+    // Désactiver le copier-coller pour les utilisateurs non autorisés
+    $('.content-edit[readonly]').on('copy paste cut', function(e) {
+        e.preventDefault();
+    });
+});
+
+
+
+
+
+
+
+
+
+
+
+
+// jdida:
+$(document).ready(function() {
+    // Fonction pour afficher seulement 3 commentaires
+    function showLimitedComments(postId) {
+        const commentSection = $(`#comments-${postId}`);
+        const comments = commentSection.find('.comment');
+        if (comments.length > 3) {
+            comments.slice(3).hide();
+            commentSection.append(`<div class="show-more-comments" data-post-id="${postId}">Voir plus de commentaires</div>`);
+        }
+    }
+
+    // Appliquer la limitation des commentaires à tous les posts
+    $('.divstatus_profile').each(function() {
+        const postId = $(this).attr('id').split('-')[1];
+        showLimitedComments(postId);
+    });
+
+    // Gérer le clic sur "Voir plus de commentaires"
+    $(document).on('click', '.show-more-comments', function() {
+        const postId = $(this).data('post-id');
+        $(`#comments-${postId} .comment`).show();
+        $(this).remove();
+    });
+
+    // Gérer le clic sur le bouton de commentaire
+    // $('.commentlogoprofile').on('click', function() {
+    //     const postId = $(this).data('post-id');
+    //     const commentSection = $(`#comments-${postId}`);
+        
+    //     // Toggle la visibilité de la section de commentaires
+    //     if (commentSection.is(':visible')) {
+    //         commentSection.hide();
+    //     } else {
+    //         commentSection.show();
+    //         $(`#comments-${postId} .comment`).show();
+    //         commentSection.find('.show-more-comments').remove();
+    //     }
+        
+    //     // Bloquer le défilement
+    //     $('body').css('overflow', commentSection.is(':visible') ? 'hidden' : '');
+    // });
+
+    // Le reste de votre code JavaScript existant...
+});
+
+
+
+
+// hadaaaa:
+
+
+$(document).ready(function() {
+    // Gérer le clic sur le bouton de commentaire
+    $('.commentlogoprofile').on('click', function() {
+        const postId = $(this).data('post-id');
+        $(`#all-comments-${postId}`).show();
+        $('body').css('overflow', 'hidden');
+    });
+
+    // Fermer la div de tous les commentaires
+    $('.close-comments').on('click', function() {
+        $(this).closest('.all-comments-overlay').hide();
+        $('body').css('overflow', '');
+    });
+
+    // Fermer la div si on clique en dehors
+    $('.all-comments-overlay').on('click', function(event) {
+        if ($(event.target).hasClass('all-comments-overlay')) {
+            $(this).hide();
+            $('body').css('overflow', '');
+        }
+    });
+
+    // Fonction pour ajouter un nouveau commentaire
+    $('.add-comment-section').on('submit', function(e) {
+        e.preventDefault();
+        const form = $(this);
+        const postId = form.data('post-id');
+        const url = form.attr('action');
+        const content = form.find('input[name="content"]').val();
+
+        $.ajax({
+            type: 'POST',
+            url: url,
+            data: form.serialize(),
+            success: function(response) {
+                if (response.success) {
+                    // Ajouter le nouveau commentaire à la section "all-comments-content"
+                    const newComment = `
+                        <div class="comment">
+                            <img src="${response.profilpic}" alt="${response.author}" class="comment-profile-pic">
+                            <div class="comment-details">
+                                <strong>${response.author}</strong>
+                                <span class="comment-content">${response.content}</span>
+                                <span class="comment-date">${response.created_at}</span>
+                            </div>
+                        </div>`;
+
+                    // Ajouter le nouveau commentaire à la section "all-comments-content"
+                    // $(`#all-comments-${postId} .all-comments-content`).prepend(newComment);
+                    $(`#all-comments-${postId} .add-comment-section`).before(newComment);
+
+                    // Mettre à jour le compteur de commentaires
+                    $('.comment-count' + postId).text(response.comments_count + ' comments');
+                    
+                    // Réinitialiser le formulaire de commentaire
+                    form[0].reset();
+                } else {
+                    alert('Error: ' + response.error);
+                }
+            },
+            error: function(xhr, status, error) {
+                let errorMessage = 'An error occurred while adding the comment.';
+                if (xhr.responseJSON && xhr.responseJSON.error) {
+                    errorMessage = xhr.responseJSON.error;
+                }
+                alert('Error: ' + errorMessage);
+            }
+        });
+    });
+});
+
+
+
+
+
+
+
+
+
+
+$(document).ready(function() {
+    // Gérer le clic sur le bouton de commentaire
+    $('.commentlogoprofile').on('click', function() {
+        const postId = $(this).data('post-id');
+        $(`#all-comments-${postId}`).show();
+        $('body').css('overflow', 'hidden');
+    });
+
+    // Fermer la div de tous les commentaires
+    $('.close-comments').on('click', function() {
+        $(this).closest('.all-comments-overlay').hide();
+        $('body').css('overflow', '');
+    });
+
+    // Fermer la div si on clique en dehors
+    $('.all-comments-overlay').on('click', function(event) {
+        if ($(event.target).hasClass('all-comments-overlay')) {
+            $(this).hide();
+            $('body').css('overflow', '');
+        }
+    });
+
+    // Le reste de votre code JavaScript...
+});
+
+</script>
+{% endblock js %}
+
+

@@ -1,0 +1,89 @@
+body{
+    color: white;
+}
+.container_product{
+    display: grid;
+    grid-template-columns: auto auto;
+    margin: 10px 100px;
+    /* background-color: rgb(24, 24, 24); */
+    padding: 50px;
+}
+.partietxt_product{
+    max-width: 500px;
+    /* background-color: aqua; */
+}
+.partieimg_product{
+    display: flex;
+    justify-content: flex-end;
+}
+.imgproduct img{
+    width: 400px;
+
+}
+.partietxt_titre h1{
+    text-transform: uppercase;
+    color: #FF9F29;
+}
+.partietxt_price h2{
+    font-weight: 500;
+}
+.partietxt_desc{
+    margin-top: 20px;
+}
+.partietxt_brand{
+    margin-top: 10px;
+}
+.marque_partietxt{
+    text-decoration: underline;
+    color: #1A4D2E;
+}
+.brand_partietxt{
+    text-transform: uppercase;
+
+}
+.flavor_partietxt, .marque_partietxt{
+    color: #1A4D2E;
+    text-decoration: underline;
+    font-size: 22px;
+}
+.flavorname_partietxt{
+    text-transform: uppercase;
+}
+.form_produit{
+    margin-top: 17px;
+}
+.produit_quantite_input{
+    padding: 8px 7px;
+    width: 250px;
+    border: none;
+    border-radius: 2px;
+
+}
+.produit_quantite_input:focus{
+    border: #1A4D2E 3px solid;
+    outline: none;
+}
+.btn_produit_form{
+    margin-top: 15px;
+    background-color: #1A4D2E;
+    width: 250px;
+    padding: 10px 5px;
+    color: white;
+    border: 1px solid #1A4D2E;
+    font-size: 15px;
+    border-radius: 2px;
+    font-weight: 600;
+    letter-spacing: -0.5px;
+    cursor: pointer;
+
+}
+.btn_produit_form:hover{
+    transform: scale(1.07);
+    transition: .3s;
+    background-color: #FF9F29;
+    border:  1px solid #FF9F29 ;
+
+}
+.container_product_bas{
+    margin:0px 120px;
+}

@@ -1,0 +1,81 @@
+{% extends 'base.html' %}
+
+{% block extra_css %}
+<style>
+    body{
+        background-color: aliceblue;
+    }
+</style>
+{% endblock extra_css %}
+
+
+{% block content %}
+<div class="bootstrap-scope container mt-4">
+    <h2>User Manager</h2>
+    
+    {% if messages %}
+    <div class="messages">
+        {% for message in messages %}
+        <div class="alert alert-{{ message.tags }}">
+            {{ message }}
+        </div>
+        {% endfor %}
+    </div>
+    {% endif %}
+    
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Username</th>
+                <th>Email</th>
+                <th>Role</th>
+                <th>Date Joined</th>
+                <th>Status</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for user in users %}
+            <tr>
+                <td>{{ user.username }}</td>
+                <td>{{ user.email }}</td>
+                <td>
+                    {% if user.type_user == 'admin' %}
+                        <span class="">Admin</span>
+                    {% elif user.type_user == 'moderateur' %}
+                        <span class="">Moderator</span>
+                    {% elif user.type_user == 'coach'  %}
+                        <span class="">Coach</span>
+                    {% elif user.type_user == 'membre' %}
+                    <span class="">Membre</span>
+                    {% else %}
+                    <span class="">Normal User</span>
+                    {% endif %}
+
+                </td>
+                <td>{{ user.date_joined|date:"d M Y" }}</td>
+                <td>
+                    {% if user.is_active %}
+                    <span class="s">Active</span>
+                    {% else %}
+                    <span class="">Banned</span>
+                    {% endif %}
+                </td>
+                <td>
+                    {% if not user.is_superuser %}
+                        {% if user.is_active %}
+                        <a href="{% url 'ban_user' user.id %}" class="btn btn-warning btn-sm" onclick="return confirm('Are you sure you want to ban this user?')">Ban</a>
+                        {% else %}
+                        <a href="{% url 'unban_user' user.id %}" class="btn btn-info btn-sm">Unban</a>
+                        {% endif %}
+                        <a href="{% url 'delete_user' user.id %}" class="btn btn-danger btn-sm" onclick="return confirm('Are you sure you want to permanently delete this user? This action cannot be undone.')">Delete</a>
+                    {% else %}
+                        <span class="text-muted">No actions available</span>
+                    {% endif %}
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

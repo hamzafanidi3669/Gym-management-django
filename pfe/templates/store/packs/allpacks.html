@@ -1,0 +1,159 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/store/add.css' %}">
+<link rel="stylesheet" href="{% static 'css/store/allpacks.css' %}">
+<link rel="stylesheet" href="{% static 'css/store/pack.css' %}">
+<style>
+
+</style>
+{% endblock extra_css %}
+
+{% block content %}
+
+
+
+
+
+
+
+
+
+
+
+
+
+ <!-- prices -->
+ <div class="pricing_packs bootstrap-scope">
+    <div class="container">
+      <div class="row">
+        
+        {% for sub in allsub %}
+        <a href="{% url 'pack' sub.id %}" class="col-md-4 mb-4 divpricing_pack">
+          <br>
+          {% if sub.type == 'Premium' %}
+          <div class="price-card divpricing_pack_premium">
+          {% elif sub.type == 'Gold' %}
+          <div class="price-card divpricing_pack_gold">
+            {% else %}
+            <div class="price-card divpricing_pack_bronze">
+              {% endif %}
+        
+            {% if sub.type == 'Premium' %}
+            <div class="price-card-header price-card-header-premium">
+              <i class="fas fa-dumbbell fa-3x fa_dumbell_size"></i>
+            </div>
+            {% elif sub.type == 'Gold' %}
+            <div class="price-card-header price-card-header-gold">
+              <i class="fas fa-dumbbell fa-3x fa_dumbell_size"></i>
+            </div>
+            {% elif sub.type == 'Bronze' %}
+            <div class="price-card-header price-card-header-bronze">
+              <i class="fas fa-dumbbell fa-3x fa_dumbell_size"></i>
+            </div>
+            {% endif%}
+            <form action="" method="post" class="price-card-body">
+              <h1 class="price-card-title"> {{sub.type}} </h1>
+              <!-- <i class="fa-solid fa-medal" style="color: #FFD43B;"></i> -->
+    
+              <h3 class="price-card-price">{{sub.price}} MAD<small></small></h3>
+              {% if sub.duration == 'Annuel' %}
+                <h5 class="price-card-title">1 YEAR</h5>
+              {% endif %}
+              <ul class="price-card-features">
+                {% if sub.access_hours == '24h'  %}
+                <li><i class="fas fa-check"></i> Access 24H/24</li>
+                {% else %}
+                <li><i class="fa-solid fa-xmark"  style="color: #942d2d;"></i> Access 24H/24</li>
+                {% endif %}
+  
+                
+  
+                {% if sub.class_access %}
+                <li><i class="fas fa-check"></i> Access To All Classes</li>
+                <li><i class="fas fa-check"></i> Unlimited Equipments</li>
+                {% else %}
+                <li><i class="fa-solid fa-xmark"  style="color: #942d2d;"></i>  Access To All Classes</li>
+                <li><i class="fa-solid fa-xmark"  style="color: #942d2d;"></i>  Unlimited Equipmentss</li>
+                {% endif %}
+  
+                {% if sub.friend_invites > 0 %}
+                <li><i class="fas fa-check"></i> {{sub.friend_invites}} Friends Invite Included / month</li>
+                {% else %}
+                <li><i class="fa-solid fa-xmark"  style="color: #942d2d;"></i>No Friends Invite</li>
+                {% endif %}
+                {% if sub.coach_sessions %}
+                <li><i class="fas fa-check"></i> {{sub.coach_sessions}} Coaching Sessions</li>
+                {% else %}
+                <li><i class="fa-solid fa-xmark"  style="color: #942d2d;"></i>  {{sub.coach_sessions}} Coaching Sessions</li>
+                {% endif %}
+              </ul>
+              <button type="button" class="btn-join">JOIN NOW</button>
+            </form>
+          </div>
+        </a>
+        {% endfor %}
+
+        <br> <br> <br> <br> <br>
+
+
+        
+
+        <div id="subscription-form" class="subscription-form">
+            <h3 class="text-center">Formulaire de souscription</h3>
+            <form action="{% url 'form_pack_validate' %}" method="POST">
+                {% csrf_token %}
+
+                <div class="form-group">
+                    <label for="sub">Subscriptions : </label>
+                    <select name="subtype" id="">
+                       
+                        {% for sub in allsub %}
+                        <option value="{{sub.id}}"> {{sub.type}} </option>
+                        {% endfor %}
+                    
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="email">Current Mail</label>
+                    <input type="email" class="form-control" id="email" value="{{user.email}}" name="email" required>
+                </div>
+                <div class="form-group">
+                    <label for="start_date">Start Date</label>
+                    <!-- <input type="date" class="form-control" value="{{now}}" id="start_date" name="start_date" required> -->
+                    <input type="date" class="form-control date-input" id="start_date" name="start_date" required>
+                    
+                </div>
+               
+                <div class="form-group">
+                    <label for="phone">Phone</label>
+                    <input type="tel" class="form-control" id="phone" name="phone" value="{{user.phone_user}}" required>
+                </div>
+                <div class="text-center divcardbtn">
+                    <br> <br>
+                    <br> 
+                    <button type="submit" class="">Reserver la souscription</button>
+                </div>
+            </form>
+        </div>
+        
+      </div>
+    </div>
+  </div>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+{% endblock content %}

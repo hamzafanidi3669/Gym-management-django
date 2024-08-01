@@ -1,0 +1,100 @@
+{% load static %}
+<!--=============== HEADER ===============-->
+<header class="header">
+   <nav class="nav container">
+      <div class="nav__data">
+         <a href="/" class="nav__logo">
+            <i class="fas fa-dumbbell"></i>
+            <span class="f">F</span>
+            <span class="anidi">anidi</span>
+            <span class="f">F</span>
+            <span class="it">it</span>
+            <span class="f">C</span>
+            <span class="lub">lub</span>
+         </a>
+         <div class="nav__toggle" id="nav-toggle">
+            <i class="ri-menu-line nav__burger"></i>
+            <i class="ri-close-line nav__close"></i>
+         </div>
+      </div>
+      <!--=============== NAV MENU ===============-->
+      <div class="nav__menu" id="nav-menu">
+         <ul class="nav__list">
+            <li><a href="/" class="nav__link">Home</a></li>
+            <li><a href="{% url 'home' %}" class="nav__link">Blog</a></li>
+            <!--=============== DROPDOWN 1 ===============-->
+            <li class="dropdown__item">
+               <a href="{% url 'store' %}" class="nav__link">
+                  Store <i class="ri-arrow-down-s-line dropdown__arrow"></i>
+               </a>
+               <ul class="dropdown__menu">
+                  <li>
+                     <a href="{% url 'store' %}" class="dropdown__link">
+                        <i class="ri-pie-chart-line"></i> Overview
+                     </a>
+                  </li>
+                  <li>
+                     <a href="{% url 'news_product' %}" class="dropdown__link">
+                        <i class="ri-arrow-up-down-line"></i> News
+                     </a>
+                  </li>
+                  <!--=============== DROPDOWN SUBMENU ===============-->
+                  <li class="dropdown__subitem">
+                     <a href="{% url 'allpacks' %}" class="dropdown__link">
+                        <i class="ri-arrow-up-down-line"></i> Pack
+                     </a>
+                  </li>
+               </ul>
+            </li>
+            <li><a href="/about" class="nav__link">About</a></li>
+            <li><a href="/contact" class="nav__link">Contact</a></li>
+            <!--=============== DROPDOWN 2 ===============-->
+            <li class="dropdown__item">
+               <a href="" class="nav__link">
+                  Users <i class="ri-arrow-down-s-line dropdown__arrow"></i>
+               </a>
+               <ul class="dropdown__menu">
+                  {% if authenticated_user.is_authenticated %}
+                  <li>
+                     <a href="{% url 'profile' authenticated_user.id %}" class="dropdown__link">
+                        <i class="ri-user-line"></i> Profile
+                     </a>
+                  </li>
+                  {% if authenticated_user.is_superuser %}
+                  <li>
+                     <a href="{% url 'usersmanager' %}" class="dropdown__link">
+                        <i class="ri-message-3-line"></i> UsersManager
+                     </a>
+                  </li>
+                  {% elif authenticated_user.type_user == "coach" %}
+                  <li>
+                     <a href="{% url 'coach_reservations' %}" class="dropdown__link">
+                        <i class="ri-message-3-line"></i> Reservations
+                     </a>
+                  </li>
+                  {% endif %}
+                  <li>
+                     <a href="{% url 'logout' %}" class="dropdown__link">
+                        <i class="ri-lock-line"></i> Logout
+                     </a>
+                  </li>
+                  {% else %}
+                  <li>
+                     <a href="{% url 'login' %}" class="dropdown__link">
+                        <i class="ri-message-3-line"></i> Login
+                     </a>
+                  </li>
+                  <li>
+                     <a href="{% url 'register' %}" class="dropdown__link">
+                        <i class="ri-message-3-line"></i> Register
+                     </a>
+                  </li>
+                  {% endif %}
+               </ul>
+            </li>
+         </ul>
+      </div>
+   </nav>
+</header>
+<!--=============== MAIN JS ===============-->
+<script src="{% static 'js/navbar.js' %}"></script>

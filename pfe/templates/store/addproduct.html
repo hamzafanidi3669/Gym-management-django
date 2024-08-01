@@ -1,0 +1,171 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/store/add.css' %}">
+<style>
+       footer{
+        display: none;
+    }
+</style>
+{% endblock extra_css %}
+
+{% block content %}
+
+<div class="containerr">
+    <form action="" enctype="multipart/form-data" method="post" class="login-box">
+        {% csrf_token %}
+        
+        <div class="login-header">
+            <header>Ajouter Produit</header>
+        </div>
+        
+        <div class="input-row">
+            <div class="input-box">
+                {{form.name}}
+                {% if form.name.errors %}
+                    <div class="error-messages">
+                        {% for error in form.name.errors %}
+                            <p>{{ error }}</p>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+        
+        <div class="input-row">
+            <div class="input-box">
+                {{form.price}}
+                {% if form.price.errors %}
+                    <div class="error-messages">
+                        {% for error in form.price.errors %}
+                            <p>{{ error }}</p>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+
+        <div class="input-row">
+            <div class="input-box">
+                {{form.category}}
+                {% if form.category.errors %}
+                    <div class="error-messages">
+                        {% for error in form.category.errors %}
+                            <p>{{ error }}</p>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+        
+        <div class="input-row">
+            <div class="input-box">
+                {{form.description}}
+                {% if form.description.errors %}
+                    <div class="error-messages">
+                        {% for error in form.description.errors %}
+                            <p>{{ error }}</p>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+        
+        <div class="input-row">
+            <div class="input-box">
+                {{form.image}}
+                {% if form.image.errors %}
+                    <div class="error-messages">
+                        {% for error in form.image.errors %}
+                            <p>{{ error }}</p>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+        
+        
+        
+        <div class="input-row">
+            <div class="input-box">
+                {{form.sale_price}}
+                {% if form.sale_price.errors %}
+                    <div class="error-messages">
+                        {% for error in form.sale_price.errors %}
+                            <p>{{ error }}</p>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+
+
+        
+
+        <div class="input-row">
+            <div class="input-box">
+                {{form.flavor}}
+                {% if form.flavor.errors %}
+                    <div class="error-messages">
+                        {% for error in form.flavor.errors %}
+                            <p>{{ error }}</p>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+
+        <div class="input-row">
+            <div class="input-box">
+                {{form.brand}}
+                {% if form.brand.errors %}
+                    <div class="error-messages">
+                        {% for error in form.brand.errors %}
+                            <p>{{ error }}</p>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+
+
+        <div class="input-row">
+            {{form.is_sale.label}} &nbsp;&nbsp;
+            <div class="input-box">
+                {{form.is_sale}}
+                {% if form.is_sale.errors %}
+                    <div class="error-messages">
+                        {% for error in form.is_sale.errors %}
+                            <p>{{ error }}</p>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+
+        
+        <div class="input-row">
+            <div class="input-box">
+                {{form.quantity_stock}}
+                {% if form.quantity_stock.errors %}
+                    <div class="error-messages">
+                        {% for error in form.quantity_stock.errors %}
+                            <p>{{ error }}</p>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+
+
+
+        <div class="input-submit">
+            <button type="submit" class="submit-btn" id="submit">Ajouter Produit</button>
+        </div>
+        <br> <br>
+    </form>
+</div>
+
+{% endblock content %}

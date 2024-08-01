@@ -1,0 +1,167 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block extra_css %}
+
+<style>
+    body {
+    background-color: #f8f9fa;
+    color: #333;
+}
+
+.container {
+    max-width: 900px;
+}
+
+h1 {
+    color: #28a745;
+    font-weight: 700;
+    margin-bottom: 2rem;
+}
+
+.card {
+    border: none;
+    border-radius: 15px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+}
+
+.card-body {
+    padding: 3rem;
+}
+
+h2 {
+    color: #28a745;
+    font-size: 1.5rem;
+    font-weight: 600;
+    margin-bottom: 1.5rem;
+}
+
+.contact-info li, .opening-hours li {
+    font-size: 1.1rem;
+    margin-bottom: 1rem;
+}
+
+.contact-info i {
+    color: #28a745;
+    width: 25px;
+}
+
+.contact-info a {
+    color: #333;
+    text-decoration: none;
+    transition: color 0.3s ease;
+}
+
+.contact-info a:hover {
+    color: #28a745;
+}
+
+.opening-hours li {
+    display: flex;
+    justify-content: space-between;
+}
+
+.opening-hours span {
+    font-weight: 600;
+}
+
+h3 {
+    color: #28a745;
+    font-size: 1.3rem;
+    font-weight: 600;
+}
+
+.btn-outline-primary, .btn-outline-info, .btn-outline-danger {
+    border-width: 2px;
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+}
+
+.btn-outline-primary {
+    color: #3b5998;
+    border-color: #3b5998;
+}
+
+.btn-outline-info {
+    color: #1da1f2;
+    border-color: #1da1f2;
+}
+
+.btn-outline-danger {
+    color: #e1306c;
+    border-color: #e1306c;
+}
+
+.btn-outline-primary:hover, .btn-outline-info:hover, .btn-outline-danger:hover {
+    color: #fff;
+    transform: translateY(-3px);
+}
+
+.btn-outline-primary:hover {
+    background-color: #3b5998;
+}
+
+.btn-outline-info:hover {
+    background-color: #1da1f2;
+}
+
+.btn-outline-danger:hover {
+    background-color: #e1306c;
+}
+
+@media (max-width: 768px) {
+    .card-body {
+        padding: 2rem;
+    }
+}
+</style>
+{% endblock extra_css %}
+
+{% block content %}
+<div class="container bootstrap-scope py-5">
+    <h1 class="text-center mb-5">Contactez FitLife Gym</h1>
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <div class="card shadow">
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-6 mb-4 mb-md-0">
+                            <h2 class="card-title mb-4">Nos coordonnées</h2>
+                            <ul class="list-unstyled contact-info">
+                                <li class="mb-3">
+                                    <i class="fas fa-map-marker-alt mr-2"></i> Casablanca Oulfa El Alia 4 
+                                </li>
+                                <li class="mb-3">
+                                    <i class="fas fa-phone mr-2"></i> 0630279686
+                                </li>
+                                <li class="mb-3">
+                                    <i class="fas fa-envelope mr-2"></i> 
+                                    <a href="">hamza.fanidi.lpu24@ensem.ac.ma</a>
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="col-md-6">
+                            <h2 class="card-title mb-4">Heures d'ouverture</h2>
+                            <ul class="list-unstyled opening-hours">
+                                <li>Lundi - Vendredi : <span>6h - 22h</span></li>
+                                <li>Samedi - Dimanche : <span>8h - 20h</span></li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="text-center mt-5">
+                        <h3 class="mb-3">Suivez-nous</h3>
+                        <a href="#" class="btn btn-outline-primary mr-2" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#" class="btn btn-outline-info mr-2" aria-label="Twitter"><i class="fab fa-twitter"></i></a>
+                        <a href="#" class="btn btn-outline-danger" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock content %}

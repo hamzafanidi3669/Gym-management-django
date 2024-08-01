@@ -1,0 +1,60 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/authentification/login.css' %}">
+{% endblock extra_css %}
+
+
+
+{% block content %}
+
+
+<div class="containerr">
+
+
+    <form action="" method="post" class="login-box">
+        {% csrf_token %}
+    
+        <!-- errors -->
+    {% if messages %}
+        <div class="mb-4">
+            {% for message in messages %}
+                <div class="errormessage" role="alert">
+                    {{ message }}
+                </div>
+            {% endfor %}
+        </div>
+    {% endif %}
+    
+        <div class="login-header">
+            <header>Login</header>
+        </div>
+        <div class="input-box">
+            <input type="text" placeholder="USERNAME" name="username" class="input-field"> <br>
+        </div>
+        <div class="input-box">
+            <input type="text" placeholder="PASSWORD" name="password" class="input-field"> <br>
+        </div>
+        <br>
+        
+        <div class="input-submit">
+            <button class="submit-btn" id="submit"></button>
+            <label for="submit">Login</label>
+        </div>
+        <div class="sign-up-link">
+            <p>Don't have account? <a href="{% url 'register' %}">Register</a></p>
+        </div>
+    </form>
+</div>
+
+
+
+
+
+
+
+
+
+{% endblock content %}

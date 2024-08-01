@@ -1,0 +1,249 @@
+.divstatus_profile{
+    width: 50%;
+ }
+ .divstatut_global{
+    display: flex;
+    justify-content: center;
+ }
+ .comment-modal {
+    z-index: 1000; /* Augmentez cette valeur si nécessaire */
+}
+
+body.modal-open .divstatus_profile:hover {
+    transform: none;
+    background-color: initial;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+.divstatus_profile_post{
+    background-color:#ffffff ;
+
+}
+.divstatus_profile_post:hover{
+    transform: scale(1.00);
+    background-color:#ffffff ;
+    cursor: auto;
+  }
+  .divstatus_profile_post:hover input[type="text"]{
+    background-color:#ffffff ;
+
+  }
+  
+  .divstatus_profile_post:hover  .content-edit{
+    background-color:#ffffff ;
+
+  }
+
+
+
+
+
+/* image */
+.container_image_content {
+    display: flex;
+    height: calc(100vh - 140px); /* Ajuster cette valeur selon la hauteur de votre navigation */
+    position: fixed;
+    top: 140px; /* Ajuster cette valeur selon la hauteur de votre navigation */
+    left: 0;
+    right: 0;
+    background: #000000;
+}
+.container_image {
+    flex: 2;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+}
+.container_image img {
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain;
+}
+.container_content {
+    flex: 1;
+    background: white;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    overflow-y: auto;
+    max-height: 100vh;
+}
+.post_header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+}
+.user_info {
+    display: flex;
+    align-items: center;
+}
+.profile_pic {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    margin-right: 10px;
+}
+.name_time h3 {
+    margin: 0;
+    font-size: 16px;
+}
+.name_time p {
+    margin: 0;
+    font-size: 12px;
+    color: #65676B;
+}
+.post_options i {
+    font-size: 20px;
+    color: #65676B;
+    cursor: pointer;
+}
+.post_caption {
+    margin-bottom: 15px;
+}
+.post_stats {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 15px;
+    font-size: 14px;
+    color: #65676B;
+}
+.post_actions {
+    display: flex;
+    justify-content: flex-start;
+    border-top: 1px solid #CED0D4;
+    border-bottom: 1px solid #CED0D4;
+    padding: 10px 0;
+    margin-bottom: 15px;
+}
+.post_actions button {
+    background: none;
+    border: none;
+    font-size: 14px;
+    color: #65676B;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    margin-right: 20px;
+}
+.post_actions button i {
+    margin-right: 5px;
+}
+.comments_section {
+    overflow-y: auto;
+    max-height: calc(100vh - 400px);
+}
+.comment {
+    display: flex;
+    margin-bottom: 10px;
+    align-items: flex-start;
+}
+.comment_content {
+    background: #F0F2F5;
+    border-radius: 18px;
+    padding: 8px 12px;
+    margin-left: 10px;
+    flex: 1;
+}
+.comment_content h4 {
+    margin: 0;
+    font-size: 13px;
+    font-weight: bold;
+}
+.comment_content p {
+    margin: 5px 0 0;
+    font-size: 14px;
+}
+.comment-form , .comment-formm , .comment-formm_add{
+    margin-top: 15px;
+    display: flex;
+}
+.comment-form input[type="text"] {
+    flex: 1;
+    padding: 8px;
+    border: 1px solid #CED0D4;
+    border-radius: 20px;
+    margin-right: 10px;
+}
+.comment-form button {
+    background: #1A4D2E;
+    color: white;
+    border: none;
+    padding: 8px 15px;
+    border-radius: 20px;
+    cursor: pointer;
+}
+
+
+
+.comment-formm input[type="text"] {
+    flex: 1;
+    padding: 8px;
+    border: 1px solid #CED0D4;
+    border-radius: 20px;
+    margin-right: 10px;
+}
+.comment-formm button {
+    background: #1A4D2E;
+    color: white;
+    border: none;
+    padding: 8px 15px;
+    border-radius: 20px;
+    cursor: pointer;
+}
+
+
+.comment-formm_add input[type="text"] {
+    flex: 1;
+    padding: 8px;
+    border: 1px solid #CED0D4;
+    border-radius: 20px;
+    margin-right: 10px;
+}
+.comment-formm_add button {
+    background: #1A4D2E;
+    color: white;
+    border: none;
+    padding: 8px 15px;
+    border-radius: 20px;
+    cursor: pointer;
+}
+.comment-modal .modal-content {
+    width: 90%;
+    max-width: 600px;
+    padding: 20px;
+}
+
+.comment-modal {
+    display: none;
+    position: fixed;
+    z-index: 1000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0,0,0,0.4);
+}
+
+.modal-content {
+    background-color: #fefefe;
+    margin: 10% auto;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+}
+
+

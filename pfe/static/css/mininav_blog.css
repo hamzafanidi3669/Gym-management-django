@@ -1,0 +1,65 @@
+/* .container_mininavblog{ */
+    /* width: 80%; */
+    /* margin: 0 auto; */
+/* } */
+
+.navminiblog{
+    width: 100%;
+    background-color: #1A4D2E;
+    padding: 0.5rem 1.7rem;
+    position: fixed;
+    top: 80px;
+    z-index: 2;
+}
+.testmini{
+    /* background-color: beige; */
+    margin-left: 120px;
+}
+.testmini a{
+    color: white;
+    font-size: 24px;
+
+}
+.navminiblog .container_mininavblog{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+.search-bar{
+    background-color: rgb(0, 0, 0);
+    border-radius: 2rem;
+    padding: 0.6rem 1rem;
+}
+.search-bar input[type="search"]{
+    background: transparent;
+    width: 20vw;
+    margin-left: 1rem;
+    font-size: 0.9rem;
+    color: rgb(252, 252, 252);
+    border: none;
+    outline: none;
+}
+.testmini i{
+    font-size: 20px;
+}
+
+.mininav_notifications span{
+    font-size: 17px!important;
+    position: relative;
+    top: 5px;
+    right: 7px;
+    color: #FF9F29;
+    /* z-index: 5; */
+    font-weight: 900;    
+}
+.testmini i{
+    font-size: 17px;
+    /* font-size: 16px!important; */
+
+}
+.famessagee{
+    font-size: 16px!important;
+}
+.faamies{
+    font-size: 16px!important;
+}

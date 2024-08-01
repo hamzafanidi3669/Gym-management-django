@@ -1,0 +1,193 @@
+body {
+    background-color: #121212;
+    color: #ffffff;
+    background-image: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), url(../../image/invictusgoAlmatygymzone2022.jpeg);
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
+    position: relative;
+}
+
+body::before {
+    content: "";
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: inherit;
+    filter: blur(8px);
+    z-index: -1;
+}
+
+.container {
+    position: relative;
+    z-index: 1;
+}
+
+.card {
+    border: 1px solid rgb(37, 37, 37)!important;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+    background-color: rgba(33, 33, 33, 0.85);
+    backdrop-filter: blur(2px);
+    transition: transform 0.3s ease;
+}
+
+.card:hover {
+    transform: translateY(-5px);
+}
+
+.card-header {
+    border-bottom: none;
+    background-color: #1e88e5;
+    padding: 1.5rem;
+    border-radius: 10px 10px 0 0;
+}
+
+.card-header h2 {
+    font-weight: 700;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+}
+
+.list-group-item {
+    border-color: rgba(255, 255, 255, 0.1);
+    background-color: transparent;
+    padding: 1rem 1.5rem;
+    font-size: 1.1rem;
+}
+
+.btn-primary {
+    background-color: #4CAF50;
+    border-color: #4CAF50;
+    transition: all 0.3s ease;
+    padding: 0.75rem 2rem;
+    font-size: 1.2rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.btn-primary:hover {
+    background-color: #45a049;
+    border-color: #45a049;
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(76, 175, 80, 0.4);
+}
+
+.display-4 {
+    color: #4CAF50;
+    font-weight: 700;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+.fas {
+    color: #4CAF50;
+    margin-right: 10px;
+    font-size: 1.2rem;
+}
+
+.subscription-form {
+    margin-top: 3rem;
+    padding: 2.5rem;
+    background-color: rgba(33, 33, 33, 0.85);
+    border-radius: 15px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+    backdrop-filter: blur(10px);
+}
+
+.subscription-form h3 {
+    color: #4CAF50;
+    margin-bottom: 1.5rem;
+    font-weight: 700;
+    text-align: center;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.form-control {
+    background-color: rgba(51, 51, 51, 0.8);
+    border-color: #444;
+    color: #fff;
+    padding: 0.75rem 1rem;
+    font-size: 1.1rem;
+    transition: all 0.3s ease;
+}
+
+.form-control:focus {
+    background-color: rgba(68, 68, 68, 0.9);
+    border-color: #4CAF50;
+    color: #fff;
+    box-shadow: 0 0 0 0.2rem rgba(76, 175, 80, 0.25);
+}
+
+.form-group label {
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+    color: #e0e0e0;
+}
+
+.text-muted {
+    color: #bdbdbd !important;
+}
+
+@media (max-width: 768px) {
+    .card, .subscription-form {
+        margin-left: 15px;
+        margin-right: 15px;
+    }
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.card, .subscription-form {
+    animation: fadeIn 0.8s ease-out;
+}
+.divcardbtn a{
+    background:transparent;
+    border:1px solid #FF9F29 ;
+    padding: 20px;
+    text-decoration: none;
+}
+.divcardbtn a:hover{
+    background-color:#FF9F29 ;
+    transition: 1s;
+}
+
+.form-group{
+    display: grid;
+    grid-template-columns: 1fr 2fr;
+    padding: 25px;
+    align-items: center;
+}
+
+.form-group input[type="date"] {
+    border: 1px solid #383838;
+    outline: none;
+}
+.form-group input[type="tel"] {
+    border: 1px solid #383838;
+    outline: none;
+}
+
+.form-group input[type="email"] {
+    border: 1px solid #383838;
+   
+}
+input[type="email"]:focus{
+    outline: none!important;
+}
+.divcardbtn button{
+    background:transparent;
+    border:1px solid #FF9F29 ;
+    padding: 20px;
+    text-decoration: none;
+    color: white;
+}
+.divcardbtn button:hover{
+    background-color:#FF9F29 ;
+    transition: 1s;
+}

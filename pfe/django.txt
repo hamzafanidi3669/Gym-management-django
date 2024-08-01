@@ -1,0 +1,191 @@
+python -m venv venvv
+activi lvenv
+installi django pip install django
+django-admin startproject django
+python manage.py runserver
+creeyit l app authentification
+drt l urls.py
+zdtha f installed apps 
+views
+creeyit templates berra lapps 
+'DIRS': [os.path.join(BASE_DIR,"templates")],
+sf wdrt link ddatabase
+
+static ya static:
+configurina lparams b3da :
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles') #dik static files dyal shno bgheti tsmi dossier
+STATIC_URL = '/static/'
+STATICFILES_DIRS=[
+    os.path.join(BASE_DIR,'static')
+]
+creeyini structure lli bghena
+sf wdrna python collectstatic
+
+mn mora wahd lbelbala hashno dert flmodels dyal authentification :
+
+
+Hérite de la classe AbstractUser de Django, ce qui vous donne des fonctionnalités d'authentification prêtes à l'emploi.
+
+from django.db import models
+from django.contrib.auth.models import AbstractUser
+
+# Create your models here.
+
+class CustomUser(AbstractUser):
+    first_name = models.CharField(max_length=150, verbose_name="Prénom" , default="")  # Champ pour le prénom de l'utilisateur
+    last_name = models.CharField(max_length=150, verbose_name="Nom de famille",default="")  # Champ pour le nom de famille de l'utilisateur
+    Phone_user=models.CharField(max_length=10,verbose_name="Telephone", default="")
+    Adress_user=models.CharField(max_length=10,verbose_name="Telephone" , default="")
+    # membre howa lli 3ndo pack
+    type_user = models.CharField(max_length=20, choices=[
+        ('admin', 'Administrateur'),
+        ('moderateur', 'Modérateur'),
+        ('membre', 'Membre'),
+        ('client', 'Client'),
+        ('visiteur', 'Visiteur'),
+    ], default='visiteur')
+
+    # Champs d'authentification par défaut (ne pas modifier)
+    username = models.CharField(max_length=150, unique=True, verbose_name="Nom d'utilisateur")  # Identifiant unique pour la connexion
+    email = models.EmailField(max_length=255, unique=True, verbose_name="Adresse e-mail")  # Adresse e-mail de l'utilisateur
+    password = models.CharField(max_length=128, verbose_name="Mot de passe")  # Mot de passe de l'utilisateur
+    is_superuser = models.BooleanField(default=False, verbose_name="Superutilisateur")  # Statut de superutilisateur
+    is_staff = models.BooleanField(default=False, verbose_name="Membre du personnel")  # Statut de membre du personnel
+    is_active = models.BooleanField(default=True, verbose_name="Utilisateur actif")  # Statut d'activation de l'utilisateur
+    last_login = models.DateTimeField(verbose_name="Dernière connexion",default=None)  # Date et heure de la dernière connexion
+    date_joined = models.DateTimeField(verbose_name="Date d'inscription")  # Date et heure d'inscription de l'utilisateur
+
+    # Champs supplémentaires (si nécessaire)
+    # ...
+
+    def __str__(self):
+        return f"{self.first_name} {self.last_name}"
+
+
+bash nadya db ila modifit ayya haja nder gha make_migrations omigrate dkshi ghadi ytmigra ytmodifya rraso flbase de donnee 
+dik AbstractUser dyal l auth
+
+zedt hadi 
+@login_required
+wzedt hadi maaha fsettings:
+LOGIN_URL = 'login'  # ila tentéti dkhul lhome blama tkon mlogi ghde yreddek llogin
+wbash nadya kikhelli dik next fl url bash fash ydir login ghadi ymshi ldik blasa lli kan baghe ymshi liha
+
+RegistrationForm est une classe plus large que UserCreationForm dans Django.
+
+
+
+MEDIA_ROOT=os.path.join(BASE_DIR,'media')
+MEDIA_URL='/media/'
+fl urls dyal projet:
+from . import settings
+from django.conf.urls.static import static
++static(settings.MEDIA_URL,document_root=settings.MEDIA_ROOT)
+
+fmodels.py store:
+from django.db import models
+from authentification.models import CustomUser
+
+class Category(models.Model):
+    name=models.CharField(max_length=50)
+
+    def __str__(self):
+        return self.name
+    
+class Product(models.Model):
+    name=models.CharField(max_length=50)
+    price=models.DecimalField(decimal_places=2,max_digits=6,default=0) #max_digits 6 hya = 9999.99 
+    category=models.ForeignKey(Category,on_delete=models.CASCADE , default=1)
+    description=models.CharField(max_length=254,default='',blank=True,null=True)
+    image=models.ImageField(upload_to='uploads/product/')
+
+
+    
+    def __str__(self):
+        return self.name
+    
+class Order(models.Model):
+    user=models.ForeignKey(CustomUser,on_delete=models.CASCADE)
+    date_commande = models.DateTimeField(auto_now_add=True)
+    status_commande=models.BooleanField(default=False) #drt default false tanconfirmiwha hna
+
+    def __str__(self):
+        return f"Commande {self.id} de {self.user.username}"
+
+class Order_Details(models.Model):
+    order=models.ForeignKey(Order,on_delete=models.CASCADE)
+    product=models.ForeignKey(Product,on_delete=models.CASCADE)
+    quantity=models.IntegerField(default=1)
+
+    def __str__(self):
+        return f"commande numero {self.order} de produit numero {self.product}"
+
+# Cart 
+
+#Cart_details
+
+
+pip install pillow
+3la 9bl dok l image
+
+ila bghet n affichi shi image kander hadshi fsrc page url:
+<img src="{{product.image.url}}" >
+
+name = forms.CharField(label="Nom De Produits", max_length=50, required=True, widget=forms.TextInput(attrs={'class': 'testtest', 'placeholder': 'Nom de Produit'}))
+
+had l3yba lli ktebt kina fforms.py , zedna widget =forms.TextInput... baash nzed les attribbuts fdik l input bhal class , wsf kanmshi l css ngadha wlkin ra possible nder leha hoka : 
+.form-group input{}  wghadi ykhdm css
+
+
+bash shi view y accede liha gher admin
+Create your views here.
+def admin_check(user):
+    return user.is_superuser
+@user_passes_test(admin_check, login_url='/')
+
+
+# Récupérer les saveurs uniques
+unique_flavors = produits.values_list('flavor', flat=True).distinct()
+unique_brand = produits.values_list('brand', flat=True).distinct()
+dik flat kon drna false ayrecuperer lina ('vanille',) ('',)  
+
+unique_flavors = produits.exclude(flavor__exact='').values_list('flavor', flat=True).distinct()
+mayjibsh dok lvalues khawin dyal lclothes
+
+
+if min_price:
+        produits = produits.filter(price__gte=min_price)
+if max_price:
+        produits = produits.filter(price__lte=max_price)
+if flavor:
+        produits = produits.filter(flavor__icontains=flavor)
+if brand:
+        produits = produits.filter(brand__icontains=brand)
+
+
+price_gte hya greater than or equal =This filters the queryset to include only the products where the price field is greater than or equal to min_price.
+price_lte hya less =This filters the queryset to include only the products where the price field 
+
+zedt hadi fcateg:
+{% if category.parent_id == 1 %} bash ila kent ftshirt maytle3sh lya les saveurs
+
+
+{% for item in order.order_details_set.all %} = order.order_details  wdik _set django darha kifhamha foreign key wdik . all bash nrecuperihum kolhom    , ra fash ktebt had ster kan acceder lorder_details dyal l order 1 7tash kinin bzf dles order_details 
+    
+if cart.items.exists(): # cart.items had items kifhamha brelated name dnc possible n acceder lcartItems gher brelated name men lcart
+finma kander had cart.items bhala kandkhol lcartItem
+
+dnc dak related name mohim momkin n acceder men lparent wnder ghir related name .all wla shi l3ba wghadi n acceder 
+
+
+
+post.comment_set.all() had _set fash makandirosh dik related name
+
+
+class Meta: unique\_together = ('post', 'user')
+La clause unique_together dans le modèle Like et Follow a été utilisée pour garantir qu'un utilisateur ne puisse pas aimer un même post plusieurs fois ou suivre la même personne plusieurs fois.
+
+
+La classe Meta dans un modèle Django est utilisée pour définir des options supplémentaires qui affectent le comportement du modèle
+
+

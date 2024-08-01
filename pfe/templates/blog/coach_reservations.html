@@ -1,0 +1,90 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block extra_css %}
+
+<style>
+    body{
+        background-color: aliceblue;
+    }
+    .badge_color{
+        color: black!important;
+    }
+    footer{
+        display: none;
+    }
+</style>
+{% endblock extra_css %}
+
+{% block content %}
+<div class="container bootstrap-scope mt-5">
+    <h1 class="mb-4">Mes réservations</h1>
+
+    {% if messages %}
+    <div class="container">
+        {% for message in messages %}
+        <div class="alert alert-{{ message.tags }} alert-dismissible" role="alert">
+            {{ message }}
+            <!-- <button type="button" class="" ></button> -->
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+
+
+
+        </div>
+        {% endfor %}
+    </div>
+    {% endif %}
+    {% if reservations %}
+    <div class="table-responsive">
+        <table class="table table-striped table-hover">
+            <thead class="thead-dark">
+                <tr>
+                    <th>Client</th>
+                    <th>Date</th>
+                    <th>Heure</th>
+                    <th>Statut</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for reservation in reservations %}
+                <tr>
+                    <td>
+                        <a href="{% url 'profile' reservation.client.id %}">
+                            {{ reservation.client.username }}
+                        </a>
+                    </td>
+                    <td>{{ reservation.date_debut|date:"d/m/Y" }}</td>
+                    <td>{{ reservation.date_debut|time:"H:i" }}</td>
+                    <td>
+                        <span class="badge badge_color badge-{% if reservation.statut == 'acceptee' %}success{% elif reservation.statut == 'refusee' %}danger{% else %}warning{% endif %}">
+                            {{ reservation.statut }}
+                        </span>
+                    </td>
+                    <td>
+                        {% if reservation.statut == 'en attente' %}
+                        <form method="POST" class="d-inline">
+                            {% csrf_token %}
+                            <input type="hidden" name="reservation_id" value="{{ reservation.id }}">
+                            <button type="submit" name="action" value="accept" class="btn btn-success btn-sm">Accepter</button>
+                            <button type="submit" name="action" value="refuse" class="btn btn-danger btn-sm">Refuser</button>
+                        </form>
+                        {% elif reservation.statut == 'acceptee'%}
+                        <i class="fa-solid fa-check" style="color: #43ab45;"></i> Acceptée
+                        {% elif reservation.statut == 'refusee'%}
+                        <i class="fa-solid fa-x" style="color: #842929;"></i> Refusée
+                        {% endif %}
+
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    {% else %}
+    <div class="alert alert-info" role="alert">
+        Vous n'avez aucune réservation pour le moment.
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

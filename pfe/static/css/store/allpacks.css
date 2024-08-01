@@ -1,0 +1,122 @@
+
+/* elem: */
+.pricing_packs {
+    padding: 50px 0;
+  }
+  
+  .price-card {
+    background-color: #000;
+    border: 1px solid #FF9F29;
+    color: #fff;
+    text-align: center;
+    padding: 20px;
+    border-radius: 10px;
+  }
+  
+  .price-card-header {
+    /* background-color: #A0522D; */
+    color: #fff;
+    padding: 20px;
+    border-radius: 50%;
+    width: 100px;
+    height: 100px;
+    margin: 0 auto 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  .price-card-title {
+    font-size: 1.5rem;
+    margin-bottom: 10px;
+  }
+  
+  .price-card-price {
+    font-size: 2.5rem;
+    font-weight: bold;
+    margin-bottom: 20px;
+  }
+  
+  .price-card-price small {
+    font-size: 1rem;
+    font-weight: normal;
+  }
+  
+  .price-card-features {
+    list-style-type: none;
+    padding: 0;
+    margin-bottom: 20px;
+  }
+  
+  .price-card-features li {
+    margin-bottom: 10px;
+    border-bottom: 1px solid #333;
+    padding-bottom: 10px;
+  }
+  
+  .price-card-features li:last-child {
+    border-bottom: none;
+  }
+  
+  .price-card-features i {
+    color: #FF9F29;
+    margin-right: 5px;
+  }
+  
+  .btn-join {
+    background-color: #000;
+    color: #FF9F29;
+    border: 2px solid #FF9F29;
+    padding: 10px 20px;
+    font-size: 1.2rem;
+    font-weight: bold;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: all 0.3s ease;
+  }
+  
+  .btn-join:hover {
+    background-color: #FF9F29;
+    color: #000;
+  }
+  
+  .divpricing_pack_bronze:hover{
+    background-color: rgba(160, 82, 45, 0.2); /* La couleur #A0522D avec une opacité de 0.2 */
+  
+    transform: scale(1.02);
+    transition: .4s;
+    cursor: pointer;
+  }
+  .divpricing_pack_gold:hover{
+    background-color: rgba(255, 215, 0, 0.2); /* La couleur #FFD700 avec une opacité de 0.2 */
+    transform: scale(1.02);
+    cursor: pointer;
+    transition: .4s;
+  }
+  
+  
+  .divpricing_pack_premium:hover{
+    background-color: rgba(255, 159, 41, 0.2); /* La couleur #FF9F29 avec une opacité de 0.2 */
+    cursor: pointer;
+  
+    transform: scale(1.02);
+    transition: .4s;
+  }
+  .divh1homepricing{
+    display: flex;
+    justify-content: center;
+  }
+  .divh1homepricing h1{
+    color: #FF9F29;
+    font-size: 90px!important;
+  }
+  .divpricing_pack{
+    text-decoration: none!important;
+    text-align: inherit; /* ou 'initial' */
+    color: inherit; /* Hérite de la couleur de
+     texte du parent */
+  }
+  .fa_dumbell_size{
+    font-size: 70px!important;
+    color: #FF9F29!important;
+}  

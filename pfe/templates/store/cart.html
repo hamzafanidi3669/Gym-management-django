@@ -1,0 +1,77 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/store/store.css' %}">
+<link rel="stylesheet" href="{% static 'css/mininav.css' %}">
+<link rel="stylesheet" href="{% static 'css/store/cart.css' %}">
+{% endblock extra_css %}
+
+{% block content %}
+{% include 'partials/mininav.html' %}
+
+
+
+<div class="cart-container">
+    <div class="cart-header">
+        <h1>Panier</h1>
+    </div>
+    {% if messages %}
+<div class="container">
+    {% for message in messages %}
+    <div class="alert alert-{{ message.tags }} alert-dismissible" role="alert">
+        {{ message }}
+        <!-- <button type="button" class="" ></button> -->
+        <i class="fa-solid fa-xmark btn-close" data-bs-dismiss="alert" aria-label="Close" style="color: #585858;"></i>
+    </div>
+    {% endfor %}
+</div>
+
+{% endif %}
+    {% if cart.items.exists %}
+        {% for item in cart.items.all %}
+        <div class="cart-item">
+            <img src="{{ item.product.image.url }}" alt="{{ item.product.name }}">
+            <div class="cart-item-details">
+                <span class="cart_name_produit">{{ item.product.name }}</span>
+                <div class="cart-item-quantity">
+                    <form method="post" action="{% url 'update_cart_item' item.product.id %}">
+                        {% csrf_token %}
+                        Quantity &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                        <input type="number" name="quantity" value="{{ item.quantity }}" min="1">
+                        <button type="submit" class="btnupdatecart">Update</button>
+                    </form>
+                </div>
+            </div>
+            <div class="cart-item-price">{{ item.get_total_price }} DHS</div>
+            <div class="cart-item-remove">
+                <form method="post" action="{% url 'remove_from_cart' item.product.id %}">
+                    {% csrf_token %}
+                    <button type="submit">Remove</button>
+                </form>
+            </div>
+        </div>
+        {% endfor %}
+        <div class="cart-total">
+            <span>Total:</span> 
+            {{ cart.get_total_price }} DHS
+            <form method="post" class="formcartcommander" action="{% url 'confirm_order' %}" id="confirmOrderForm">
+                {% csrf_token %}
+                <button type="submit" id="confirmOrderButton">Commander</button>
+            </form>
+        </div>
+    {% else %}
+    <p>Votre panier est vide.</p>
+    {% endif %}
+</div>
+
+<script>
+        document.getElementById('confirmOrderButton').addEventListener('click', function(event) {
+        event.preventDefault();
+        if (confirm('Êtes-vous sûr de vouloir confirmer votre commande ?')) {
+            document.getElementById('confirmOrderForm').submit(); 
+        }
+    });
+</script>
+{% endblock content %}

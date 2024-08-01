@@ -1,0 +1,34 @@
+<!-- templates/partials/mininav.html -->
+<nav class="navstore">
+    <div class="divulstore">
+        <ul class="ul1">
+            {% for category in categories %}
+            <li>
+                <a href="{% url 'category_products' category.id %}" class="nav-item">{{ category.name }}</a>
+                {% if category.subcategories.exists %}
+                <ul class="dropdown">
+                    {% for subcategory in category.subcategories.all %}
+                    <li>
+                        <a href="{% url 'category_products' subcategory.id %}" class="sub-category-link">{{ subcategory.name }}</a>
+                    </li>
+                    {% endfor %}
+                 
+                </ul>
+                {% endif %}
+                
+            </li>
+            {% endfor %}
+            <li>
+                <a href="{% url 'allpacks' %}" class="panierlogonav">Packs
+                </a>
+            </li>
+            <li>
+                <a href="{% url 'view_cart' %}" class="panierlogonav">Cart
+                    <i class="fa-solid fa-cart-shopping"></i>
+                </a>
+            </li>
+        </ul>
+    </div>
+</nav>
+
+

@@ -1,0 +1,245 @@
+body {
+    color: #FAF3E3;
+    background-color: #080808;
+}
+
+body {
+    color: #FAF3E3;
+    background-color: #080808;
+}
+/* navstart */
+
+/* navend */
+.store-title, .add-product-btn {
+    text-align: center;
+    color: #FF9F29;
+    margin: 20px 0;
+}
+
+.add-product-btn {
+    display: inline-block;
+    padding: 10px 20px;
+    background-color: #1A4D2E;
+    color: #FAF3E3;
+    border-radius: 5px;
+    text-decoration: none;
+    transition: background-color 0.3s ease;
+}
+.add-product-btn:hover {
+    background-color: #FF9F29;
+}
+
+.containerrr {
+    display: flex;
+    padding: 20px;
+    gap: 20px;
+}
+
+.filter {
+    width: 300px;
+    padding: 20px;
+    background-color: #080808;
+    /* background-color: #000000; */
+    color: #FAF3E3;
+    border: 1px solid rgb(13, 13, 13);
+}
+
+.products {
+    flex: 1;
+}
+
+.products-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 20px;
+    padding: 20px;
+}
+
+.product-item {
+    /* background-color: #010101; */
+    background-color: #080808;
+
+    border: 1px solid rgb(13, 13, 13);
+    overflow: hidden;
+    text-align: center;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    color: inherit;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    min-height: 500px; /* Ajustez cette valeur selon vos besoins */
+}
+
+.product-item:hover {
+    transform: scale(1.05);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.product-link {
+    text-decoration: none;
+    color: inherit;
+}
+
+.product-img {
+    width: 100%;
+    height: 300px; /* Vous pouvez ajuster cette hauteur */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.product-img img {
+    max-width: 100%;
+    max-height: 100%;
+}
+
+.product-info {
+    padding: 10px;
+    flex-grow: 1;
+}
+
+.product-name {
+    font-size: 24px;
+    color: #1A4D2E;
+    text-transform: capitalize;
+}
+
+.product-desc {
+    font-size: 14px;
+    color: #d3d3d3;
+    margin: 5px 0 10px 0;
+}
+
+.product-price-btn {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px;
+    background-color: #000000;
+    border-top: 1px solid #444444;
+}
+
+.product-price {
+    font-size: 19px;
+    color: #FF9F29;
+}
+
+.product-add-btn {
+    background-color: #FF9F29;
+    border: none;
+    border-radius: 5px;
+    padding: 8px 16px;
+    color: white;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.3s ease;
+    font-size: 16px;
+    font-weight: 500;
+}
+
+.product-add-btn:hover {
+    background-color: #1A4D2E;
+    font-size: 19px;
+    transition: .3s;
+}
+
+
+.product-item::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    background: linear-gradient(135deg, rgba(255, 159, 41, 0.5) 0%, rgba(255, 159, 41, 0) 100%);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    pointer-events: none;
+}
+
+.product-item:hover::before {
+    opacity: 1;
+}
+
+
+/* filtreage */
+.filter {
+    background-color: #080808;
+    color: #FAF3E3;
+    padding: 20px;
+    border: 1px solid rgb(13, 13, 13);
+    border-radius: 5px;
+}
+
+.filter h2 {
+    margin-bottom: 15px;
+    font-size: 31px;
+}
+
+.filter form {
+    display: flex;
+    flex-direction: column;
+}
+
+.filter form label {
+    margin-bottom: 10px;
+    font-size: 21px;
+    font-weight: 500;
+}
+
+.checkbox-group {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.checkbox-group label {
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+}
+
+.checkbox-group input[type="checkbox"] {
+    margin-right: 10px;
+    cursor: pointer;
+}
+
+.filter button {
+    margin-top: 10px;
+    padding: 8px 16px;
+    background-color: #1A4D2E;
+    color: #FAF3E3;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+.filter button[type="button"]{
+    background-color: rgb(0, 0, 0);
+    border: 1px solid rgb(29, 29, 29);
+}
+
+.filter button:hover {
+    background-color: #FF9F29;
+}
+.filter h2{
+    color: #FF9F29;
+}
+form h3{
+    color: #1A4D2E;
+}
+.prixmaxstore{
+    color: #1A4D2E;
+}
+.prixminstore{
+    color: #1A4D2E;
+}
+.panierlogonav{
+    position: relative;
+    /* left: 100px; */
+}
+.addproduct_btn_admin{
+    display: flex!important;
+    justify-content: flex-end!important;
+    margin-right: 20px;
+}

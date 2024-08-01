@@ -1,0 +1,75 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block extra_css %}
+<style>
+    body {
+    background-color: #f8f9fa;
+}
+
+.card {
+    border: none;
+    transition: transform 0.3s;
+}
+
+.card:hover {
+    transform: translateY(-5px);
+}
+
+
+h1, h2, h3 {
+    color: #343a40;
+}
+</style>
+{% endblock extra_css %}
+
+{% block content %}
+<div class=" bootstrap-scope container py-5">
+    <div class="row">
+        <div class="col-lg-8 mx-auto">
+            <h1 class="text-center mb-5">À propos de FFC</h1>
+            <div class="card shadow">
+                <div class="card-body">
+                    <h2 class="card-title mb-4">Notre histoire</h2>
+                    <p class="card-text">
+                        Fondée en 2010, FitLife Gym est née de la passion de deux amis pour le fitness et la nutrition. Notre objectif était de créer un espace où les gens pourraient non seulement s'entraîner, mais aussi apprendre à vivre une vie plus saine et plus équilibrée.
+                    </p>
+                    <h2 class="card-title mt-5 mb-4">Notre mission</h2>
+                    <p class="card-text">
+                        Chez FFC Gym, nous nous engageons à aider nos membres à atteindre leurs objectifs de fitness, que ce soit par l'entraînement, la nutrition ou l'éducation. Nous croyons en une approche holistique du bien-être, c'est pourquoi nous offrons non seulement des équipements de pointe, mais aussi des conseils nutritionnels et des compléments alimentaires de qualité.
+                    </p>
+                </div>
+            </div>
+            <div class="row mt-5">
+                <div class="col-md-4">
+                    <div class="card text-center shadow-sm">
+                        <div class="card-body">
+                            <i class="fas fa-dumbbell fa-3x mb-3"></i>
+                            <h3 class="card-title">Entraînement</h3>
+                            <p class="card-text">Des équipements modernes et des cours variés pour tous les niveaux.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="card text-center shadow-sm">
+                        <div class="card-body">
+                            <i class="fas fa-pills fa-3x mb-3"></i>
+                            <h3 class="card-title">Nutrition</h3>
+                            <p class="card-text">Des compléments alimentaires de qualité pour soutenir vos objectifs.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="card text-center shadow-sm">
+                        <div class="card-body">
+                            <i class="fas fa-blog fa-3x mb-3"></i>
+                            <h3 class="card-title">Communauté</h3>
+                            <p class="card-text">Un blog exclusif pour partager des conseils et des succès entre membres.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock content %}
